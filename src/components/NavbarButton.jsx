@@ -2,9 +2,13 @@ import React from "react";
 
 function NavbarButton(props) {
   return (
-    <button className="btn btn-outline-light" onClick={props.handler}>
-      {props.label}
-    </button>
+    <div>
+      <li className="nav-item ms-1 mt-2">
+        <button className="btn btn-outline-light" onClick={props.handler}>
+          {props.label}
+        </button>
+      </li>
+    </div>
   );
 }
 

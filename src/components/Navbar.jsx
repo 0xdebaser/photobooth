@@ -8,22 +8,14 @@ function Navbar(props) {
         <div className="container-fluid">
           <span className="navbar-brand mb-0 h1 text-brand">fizzgen</span>
           <ul className="navbar-nav">
-            <li className="nav-item ms-2 mt-1">
-              {!props.isLoggedIn && <NavbarButton label="register" />}
-            </li>
-            <li className="nav-item ms-2 mt-1">
-              {!props.isLoggedIn && (
-                <NavbarButton label="login" handler={props.loginToggle} />
-              )}
-            </li>
-            <li className="nav-item ms-2 mt-1">
-              {props.isLoggedIn && <NavbarButton label="gallery" />}
-            </li>
-            <li className="nav-item ms-2 mt-1">
-              {props.isLoggedIn && (
-                <NavbarButton label="logout" handler={props.loginToggle} />
-              )}
-            </li>
+            {!props.isLoggedIn && <NavbarButton label="register" />}
+            {!props.isLoggedIn && (
+              <NavbarButton label="login" handler={props.loginToggle} />
+            )}
+            {props.isLoggedIn && <NavbarButton label="gallery" />}
+            {props.isLoggedIn && (
+              <NavbarButton label="logout" handler={props.loginToggle} />
+            )}
           </ul>
         </div>
       </nav>
