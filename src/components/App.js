@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
-import Webcam from "react-webcam";
+import WebcamSuite from "./WebcamSuite";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const videoConstraints = {
-    width: 360,
-    height: 360,
-    facingMode: "user",
-  };
 
   return (
     <div>
@@ -16,16 +11,7 @@ function App() {
         isLoggedIn={loggedIn}
         loginToggle={() => setLoggedIn(!loggedIn)}
       />
-      <div className="container mt-3">
-        <div className="row">
-          <Webcam
-            audio={false}
-            height={360}
-            width={360}
-            videoConstraints={videoConstraints}
-          />
-        </div>
-      </div>
+      <WebcamSuite />
     </div>
   );
 }

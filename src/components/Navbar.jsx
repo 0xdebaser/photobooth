@@ -6,7 +6,7 @@ function Navbar(props) {
     <div>
       <nav className="navbar navbar-expand-sm" id="nav-main">
         <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1 text-brand">fizzgen</span>
+          <span className="navbar-brand mb-0 h1 fs-2 text-brand">fizzgen</span>
           <ul className="navbar-nav">
             {!props.isLoggedIn && <NavbarButton label="register" />}
             {!props.isLoggedIn && (
