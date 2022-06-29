@@ -1,0 +1,37 @@
+$primary: #fa7f08;
+$secondary: #22babb;
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+:root {
+  --color-one: #348888;
+  --color-two: #22babb;
+  --color-three: #9ef8ee;
+  --color-four: #fa7f08;
+  --color-five: #f24405;
+}
+
+.btn-cam {
+  color: white;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-captured {
+  height: 360px;
+  width: auto;
+  text-align: center;
+}
+
+.text-brand {
+  color: white;
+  font-family: "Dela Gothic One", cursive;
+}
+
+#nav-main {
+  background-color: var(--color-four);
+}
