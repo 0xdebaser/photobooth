@@ -11,6 +11,11 @@ $secondary: #22babb;
   --color-five: #f24405;
 }
 
+// canvas {
+//   max-height: 360px;
+//   width: 360px !important;
+// }
+
 .btn-cam {
   color: white;
 }
@@ -32,6 +37,15 @@ $secondary: #22babb;
   font-family: "Dela Gothic One", cursive;
 }
 
+#filter-dropdown {
+  color: white;
+}
+
 #nav-main {
   background-color: var(--color-four);
+}
+
+#to-be-replaced {
+  height: 360px;
+  width: 360px;
 }

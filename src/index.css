@@ -11310,6 +11310,15 @@ textarea.form-control-lg {
   font-family: "Dela Gothic One", cursive;
 }
 
+#filter-dropdown {
+  color: white;
+}
+
 #nav-main {
   background-color: var(--color-four);
+}
+
+#to-be-replaced {
+  height: 360px;
+  width: 360px;
 }/*# sourceMappingURL=index.css.map */
