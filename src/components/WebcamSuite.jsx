@@ -96,7 +96,7 @@ function WebcamSuite() {
       </div>
 
       {/* Fizzgen me button appears once filter is applied (or none is selected) */}
-      <div className="row mt-2">
+      <div className="row mt-2" id="fizzgen-me-row">
         {filter && (
           <CamButton label="fizzgen me!" primary={true} handler={fizzgenMe} />
         )}

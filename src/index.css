@@ -11314,6 +11314,10 @@ textarea.form-control-lg {
   color: white;
 }
 
+#fizzgen-me-row {
+  font-family: "Dela Gothic One", cursive;
+}
+
 #nav-main {
   background-color: var(--color-four);
 }
