@@ -1,5 +1,6 @@
 import React from "react";
 import NavbarButton from "./NavbarButton";
+import LoginButton from "./LoginButton";
 
 function Navbar(props) {
   return (
@@ -8,14 +9,15 @@ function Navbar(props) {
         <div className="container-fluid">
           <span className="navbar-brand mb-0 h1 fs-2 text-brand">fizzgen</span>
           <ul className="navbar-nav">
-            {!props.isLoggedIn && <NavbarButton label="register" />}
             {!props.isLoggedIn && (
-              <NavbarButton label="login" handler={props.loginToggle} />
+              <NavbarButton label="register" modal="#registerModal" />
             )}
             {props.isLoggedIn && <NavbarButton label="gallery" />}
-            {props.isLoggedIn && (
-              <NavbarButton label="logout" handler={props.loginToggle} />
-            )}
+            <LoginButton
+              isLoggedIn={props.isLoggedIn}
+              toggle={props.loginToggle}
+              modal="#loginModal"
+            />
           </ul>
         </div>
       </nav>
