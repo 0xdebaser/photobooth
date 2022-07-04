@@ -11308,6 +11308,7 @@ textarea.form-control-lg {
 .text-brand {
   color: white;
   font-family: "Dela Gothic One", cursive;
+  font-size: 2em !important;
 }
 
 #filter-dropdown {
@@ -11316,6 +11317,12 @@ textarea.form-control-lg {
 
 #fizzgen-me-row {
   font-family: "Dela Gothic One", cursive;
+}
+
+#nav-display-name {
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
 }
 
 #nav-main {

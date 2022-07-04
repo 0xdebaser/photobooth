@@ -1,9 +1,63 @@
 import React from "react";
 
 function RegisterModal(props) {
-  function handler(event) {
+  //This one is for production
+  const REGISTER_API =
+    "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/register";
+
+  // This is one is for dev use (local host)
+  // const REGISTER_API = "http://localhost:8080/api/register";
+
+  async function handler(event) {
     event.preventDefault();
-    console.log("handler activated!");
+    const email = event.target[0].value;
+    const displayName = event.target[1].value;
+    const password = event.target[2].value;
+    const confirmPassword = event.target[3].value;
+    const joinDate = new Date().toUTCString();
+
+    //Check to make sure passwords match
+    if (password !== confirmPassword) {
+      alert("Password do not match. Please correct and try again!");
+      return;
+    }
+
+    const newUserData = {
+      email: email,
+      displayName: displayName,
+      password: password,
+      joinDate: joinDate,
+    };
+
+    //Send event data to API to create user
+    try {
+      const response = await fetch(REGISTER_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUserData),
+      });
+
+      if (response.status !== 200) {
+        alert(
+          `There has been a server error (${response.status}). Please try again.`
+        );
+      } else {
+        const data = await response.json();
+        if (data.result !== "success") {
+          alert(`${data.message} Please try again.`);
+        } else {
+          props.setLoggedInUser({
+            email: data.user,
+            displayName: data.displayName,
+          });
+          document.querySelector(".modal-backdrop").remove();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -18,7 +72,7 @@ function RegisterModal(props) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="registereModalLabel">
-              create a new fizzgen account ⚠ DOESN'T WORK YET!
+              create a new fizzgen account
             </h5>
             <button
               type="button"
@@ -28,7 +82,7 @@ function RegisterModal(props) {
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form onSubmit={(event) => handler(event)}>
               <div className="mb-3">
                 <label htmlFor="loginInputEmail1" className="form-label">
                   email address
@@ -45,6 +99,17 @@ function RegisterModal(props) {
                 </div>
               </div>
               <div className="mb-3">
+                <label htmlFor="displayName" className="form-label">
+                  display name (used by app to greet you)
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="registerDisplayName"
+                  required
+                />
+              </div>
+              <div className="mb-3">
                 <label htmlFor="registerInputPassword1" className="form-label">
                   password
                 </label>
@@ -55,11 +120,18 @@ function RegisterModal(props) {
                   required
                 />
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onSubmit={handler}
-              >
+              <div className="mb-3">
+                <label htmlFor="registerInputPassword2" className="form-label">
+                  confirm password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="registerInputPassword2"
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
                 Submit
               </button>
             </form>

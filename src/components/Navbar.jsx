@@ -9,15 +9,36 @@ function Navbar(props) {
         <div className="container-fluid">
           <span className="navbar-brand mb-0 h1 fs-2 text-brand">fizzgen</span>
           <ul className="navbar-nav">
-            {!props.isLoggedIn && (
-              <NavbarButton label="register" modal="#registerModal" />
+            {props.loggedInUser && (
+              <div id="nav-display-name" className="ms-2 mt-2">
+                <li>{props.loggedInUser.displayName}</li>
+              </div>
             )}
-            {props.isLoggedIn && <NavbarButton label="gallery" />}
-            <LoginButton
-              isLoggedIn={props.isLoggedIn}
-              toggle={props.loginToggle}
-              modal="#loginModal"
-            />
+            {!props.loggedInUser && (
+              <NavbarButton
+                label="register"
+                modal="#registerModal"
+                toggle="modal"
+              />
+            )}
+            {props.loggedInUser && <NavbarButton label="gallery" />}
+            {!props.loggedInUser && (
+              <LoginButton
+                loggedInUser={props.loggedInUser}
+                setLoggedInUser={props.setLoggedInUser}
+                modal="#loginModal"
+                toggle="modal"
+              />
+            )}
+            {props.loggedInUser && (
+              <NavbarButton
+                label="logout"
+                onClick={() => {
+                  props.setLoggedInUser(null);
+                }}
+                modal={null}
+              />
+            )}
           </ul>
         </div>
       </nav>

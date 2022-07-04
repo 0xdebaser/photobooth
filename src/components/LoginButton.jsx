@@ -8,9 +8,9 @@ function LoginButton(props) {
           type="button"
           className="btn btn-outline-light"
           data-bs-toggle="modal"
-          data-bs-target={!props.isLoggedIn ? props.modal : null}
+          data-bs-target={props.modal}
         >
-          {props.isLoggedIn ? "logout" : "login"}
+          {props.loggedInUser ? "logout" : "login"}
         </button>
       </li>
     </div>

@@ -42,7 +42,7 @@ function WebcamSuite() {
   }
 
   return (
-    <div className="container mt-2">
+    <div className="container mt-3">
       <div className="row">
         <div className="col text-center">
           {/* Display webcam until image is captured */}

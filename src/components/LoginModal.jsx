@@ -1,9 +1,51 @@
 import React from "react";
 
 function LoginModal(props) {
-  function handler(event) {
+  // This one is for production
+  const LOGIN_API =
+    "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/login";
+
+  // This is one is for dev use (localhost)
+  //   const LOGIN_API = "http://localhost:8080/api/login";
+
+  async function handler(event) {
     event.preventDefault();
-    console.log("handler activated!");
+    const email = event.target[0].value;
+    const password = event.target[1].value;
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    //Send event data to API to create user
+    try {
+      const response = await fetch(LOGIN_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.status !== 200) {
+        alert(
+          `There has been a server error (${response.status}). Please register or try again.`
+        );
+      } else {
+        const data = await response.json();
+        if (data.result !== "success") {
+          alert(`${data.message} Please try again.`);
+        } else {
+          props.setLoggedInUser({
+            email: data.user,
+            displayName: data.displayName,
+          });
+          document.querySelector(".modal-backdrop").remove();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -18,7 +60,7 @@ function LoginModal(props) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="loginModalLabel">
-              login to fizzgen ⚠ DOESN'T WORK YET!
+              login to fizzgen
             </h5>
             <button
               type="button"
@@ -28,7 +70,7 @@ function LoginModal(props) {
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form onSubmit={(event) => handler(event)}>
               <div className="mb-3">
                 <label htmlFor="loginInputEmail1" className="form-label">
                   email address
@@ -52,11 +94,7 @@ function LoginModal(props) {
                   required
                 />
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onSubmit={handler}
-              >
+              <button type="submit" className="btn btn-primary">
                 Submit
               </button>
             </form>
