@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function RegisterModal(props) {
   //This one is for production
@@ -8,8 +8,11 @@ function RegisterModal(props) {
   // This is one is for dev use (local host)
   // const REGISTER_API = "http://localhost:8080/api/register";
 
+  const [loading, setLoading] = useState(false);
+
   async function handler(event) {
     event.preventDefault();
+    setLoading(true);
     const email = event.target[0].value;
     const displayName = event.target[1].value;
     const password = event.target[2].value;
@@ -19,6 +22,7 @@ function RegisterModal(props) {
     //Check to make sure passwords match
     if (password !== confirmPassword) {
       alert("Password do not match. Please correct and try again!");
+      setLoading(false);
       return;
     }
 
@@ -58,6 +62,7 @@ function RegisterModal(props) {
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   }
 
   return (
@@ -131,9 +136,14 @@ function RegisterModal(props) {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+              {!loading && (
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              )}
+              {loading && (
+                <div class="spinner-border text-primary" role="status"></div>
+              )}
             </form>
           </div>
         </div>

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Pixelify } from "react-pixelify";
 import Webcam from "react-webcam";
 import CamButton from "./CamButton";
 import FilterSuite from "./FilterSuite";
-import CapturedImage from "./CapturedImage";
 
 function WebcamSuite() {
   const webcamRef = React.useRef(null);
@@ -64,12 +62,18 @@ function WebcamSuite() {
               id="captured-img"
               className="img-captured center-block"
               src={imgSrc}
+              alt="captured from webcam"
             />
           )}
 
           {/* Once filter is applied, this displays the filtered image */}
           <div id="canvas-container">
-            <img id="to-be-replaced" src={imgSrc} hidden />
+            <img
+              id="to-be-replaced"
+              src={imgSrc}
+              alt="hidden placeholder"
+              hidden
+            />
           </div>
         </div>
       </div>

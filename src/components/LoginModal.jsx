@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function LoginModal(props) {
   // This one is for production
@@ -8,8 +8,11 @@ function LoginModal(props) {
   // This is one is for dev use (localhost)
   //   const LOGIN_API = "http://localhost:8080/api/login";
 
+  const [loading, setLoading] = useState(false);
+
   async function handler(event) {
     event.preventDefault();
+    setLoading(true);
     const email = event.target[0].value;
     const password = event.target[1].value;
     const userData = {
@@ -94,9 +97,14 @@ function LoginModal(props) {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+              {!loading && (
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              )}
+              {loading && (
+                <div class="spinner-border text-primary" role="status"></div>
+              )}
             </form>
           </div>
         </div>
