@@ -35,6 +35,7 @@ function Navbar(props) {
                 label="logout"
                 onClick={() => {
                   props.setLoggedInUser(null);
+                  localStorage.clear();
                 }}
                 modal={null}
               />

@@ -43,6 +43,8 @@ function LoginModal(props) {
             email: data.user,
             displayName: data.displayName,
           });
+          localStorage.setItem("user", data.user);
+          localStorage.setItem("displayName", data.displayName);
           document.querySelector(".modal-backdrop").remove();
         }
       }
@@ -103,7 +105,10 @@ function LoginModal(props) {
                 </button>
               )}
               {loading && (
-                <div class="spinner-border text-primary" role="status"></div>
+                <div
+                  className="spinner-border text-primary"
+                  role="status"
+                ></div>
               )}
             </form>
           </div>
