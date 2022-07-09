@@ -146,9 +146,11 @@ function WebcamSuite(props) {
                   resetAndDismiss();
                 } else {
                   props.setStep3("finished");
-                  props.setGallery(true);
-                  getGalleryData(props.loggedInUser.email, props.getGalleryApi);
-                  setTimeout(resetAndDismiss, 15 * 1000);
+                  setTimeout(() => {
+                    getGalleryData(props.loggedInUser, props.getGalleryApi);
+                    props.setGallery(true);
+                    resetAndDismiss();
+                  }, 10 * 1000);
                 }
               }
             }
