@@ -27,11 +27,15 @@ function FilterSuite(props) {
       const [canvas] = imgToCanvas(imageEl);
       replaceImgElement(canvas, imageEl);
       canvasContainer.append(imageElCopy);
+      props.setFilteredImg(props.imgSrc);
       return;
     }
 
     PixelsJS.filterImg(imageEl, filterArg);
     canvasContainer.append(imageElCopy);
+    const targetCanvas = document.querySelector("canvas");
+    const canvasImgData = targetCanvas.toDataURL("image/jpeg");
+    props.setFilteredImg(canvasImgData);
   }
 
   //Helper function from pixels.js

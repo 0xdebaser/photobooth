@@ -2,11 +2,9 @@ import React, { useState } from "react";
 
 function RegisterModal(props) {
   //This one is for production
-  const REGISTER_API =
-    "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/register";
-
-  // This is one is for dev use (local host)
-  // const REGISTER_API = "http://localhost:8080/api/register";
+  const REGISTER_API = props.dev
+    ? "http://localhost:8080/api/register"
+    : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/register";
 
   const [loading, setLoading] = useState(false);
 
@@ -107,7 +105,8 @@ function RegisterModal(props) {
               </div>
               <div className="mb-3">
                 <label htmlFor="displayName" className="form-label">
-                  display name (used by app to greet you)
+                  display name (used by app to greet you and listed in NFT data
+                  as creator)
                 </label>
                 <input
                   type="text"

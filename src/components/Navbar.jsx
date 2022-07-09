@@ -21,7 +21,22 @@ function Navbar(props) {
                 toggle="modal"
               />
             )}
-            {props.loggedInUser && <NavbarButton label="gallery" />}
+            {!props.gallery && props.loggedInUser && (
+              <NavbarButton
+                label="gallery"
+                onClick={() => {
+                  props.setGallery(true);
+                }}
+              />
+            )}
+            {props.gallery && (
+              <NavbarButton
+                label="camera"
+                onClick={() => {
+                  props.setGallery(null);
+                }}
+              />
+            )}
             {!props.loggedInUser && (
               <LoginButton
                 loggedInUser={props.loggedInUser}

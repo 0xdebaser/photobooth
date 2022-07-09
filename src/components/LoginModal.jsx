@@ -2,11 +2,9 @@ import React, { useState } from "react";
 
 function LoginModal(props) {
   // This one is for production
-  const LOGIN_API =
-    "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/login";
-
-  // This is one is for dev use (localhost)
-  //   const LOGIN_API = "http://localhost:8080/api/login";
+  const LOGIN_API = props.dev
+    ? "http://localhost:8080/api/login"
+    : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/login";
 
   const [loading, setLoading] = useState(false);
 
