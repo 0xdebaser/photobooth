@@ -2,28 +2,42 @@ import React from "react";
 
 function GalleryCard(props) {
   return (
-    <div className="col-sm-6 mt-1">
-      <div className="card">
-        <img src={props.imgSrc} className="card-img-top" alt="fizzgen" />
+    <div className="col-sm-6 col-md-4 col-xl-3 mt-2">
+      <div className="card border-secondary">
+        <img
+          src={props.imgSrc}
+          className="card-img-top rounded-circle ps-3 pe-3 pt-3 pb-3"
+          alt="fizzgen"
+        />
         <div className="card-body">
           <h5 className="card-title">{`${props.title} No. ${props.tokenId}`}</h5>
-          <p className="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
+          <p className="card-text">{props.description}</p>
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">An item</li>
-          <li className="list-group-item">A second item</li>
-          <li className="list-group-item">A third item</li>
+          <li className="list-group-item">
+            Minted on:{" "}
+            <a
+              href={`https://mumbai.polygonscan.com/tx/${props.mintTxn}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {props.network}
+            </a>
+          </li>
+          <li className="list-group-item">Owned by {props.owner}</li>
         </ul>
         <div className="card-body">
-          <a href="#" className="card-link">
-            Card link
+          <a
+            href={`https://testnets.opensea.io/assets/mumbai/${props.contract}/${props.tokenId}`}
+            className="card-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View NFT on OpenSea
           </a>
-          <a href="#" className="card-link">
+          {/* <a href="#" className="card-link">
             Another link
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
