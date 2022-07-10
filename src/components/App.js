@@ -75,6 +75,7 @@ function App() {
           setGallery={setGallery}
           getGalleryApi={GET_GALLERY_API}
           dev={dev}
+          setGalleryData={setGalleryData}
         />
       )}
       {gallery && <Gallery galleryData={galleryData} />}

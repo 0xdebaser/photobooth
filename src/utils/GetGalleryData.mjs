@@ -13,7 +13,6 @@ async function getGalleryData(user, galleryApi) {
       );
     } else {
       const data = await response.json();
-      console.log(data);
       return data.data;
     }
   } catch (error) {
