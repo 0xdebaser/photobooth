@@ -147,7 +147,7 @@ function WebcamSuite(props) {
                 } else {
                   props.setStep3("finished");
                   props.setGalleryData(
-                    await props.GetGalleryData(
+                    await getGalleryData(
                       props.loggedInUser,
                       props.getGalleryApi
                     )
