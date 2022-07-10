@@ -155,7 +155,7 @@ function WebcamSuite(props) {
                   setTimeout(() => {
                     props.setGallery(true);
                     resetAndDismiss();
-                  }, 10 * 1000);
+                  }, 4 * 1000);
                 }
               }
             }
