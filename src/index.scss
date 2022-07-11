@@ -9,6 +9,7 @@ $secondary: #22babb;
   --color-three: #9ef8ee;
   --color-four: #fa7f08;
   --color-five: #f24405;
+  --brand-font: "Dela Gothic One", cursive;
 }
 
 .btn-cam {
@@ -21,6 +22,10 @@ $secondary: #22babb;
   margin-right: auto;
 }
 
+.fizzgen-card-title {
+  font-family: var(--brand-font);
+}
+
 .img-captured {
   height: 360px;
   width: auto;
@@ -29,8 +34,16 @@ $secondary: #22babb;
 
 .text-brand {
   color: white;
-  font-family: "Dela Gothic One", cursive;
+  font-family: var(--brand-font);
   font-size: 2em !important;
+}
+
+.transfer-btn {
+  color: white;
+}
+
+#card-body-top {
+  background-color: var(--color-three);
 }
 
 #filter-dropdown {
@@ -38,7 +51,7 @@ $secondary: #22babb;
 }
 
 #fizzgen-me-row {
-  font-family: "Dela Gothic One", cursive;
+  font-family: var(--brand-font);
 }
 
 #nav-display-name {
@@ -49,6 +62,10 @@ $secondary: #22babb;
 
 #nav-main {
   background-color: var(--color-four);
+}
+
+#result-text {
+  font-size: 1.5em;
 }
 
 #to-be-replaced {
