@@ -8,7 +8,7 @@ import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./Gallery";
 import TransferModal from "./TransferModal";
 
-const dev = true;
+const dev = false;
 
 const GET_GALLERY_API = dev
   ? "http://localhost:8080/api/getGallery"
