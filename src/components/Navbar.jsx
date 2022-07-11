@@ -29,7 +29,7 @@ function Navbar(props) {
                 }}
               />
             )}
-            {props.gallery && (
+            {props.gallery && props.loggedInUser && (
               <NavbarButton
                 label="camera"
                 onClick={() => {
@@ -51,6 +51,7 @@ function Navbar(props) {
                 onClick={() => {
                   props.setLoggedInUser(null);
                   localStorage.clear();
+                  props.setGallery(null);
                 }}
                 modal={null}
               />

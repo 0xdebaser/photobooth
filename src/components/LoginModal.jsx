@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import getGalleryData from "../utils/GetGalleryData.mjs";
+import * as bootstrap from "bootstrap";
 
 function LoginModal(props) {
   // This one is for production
@@ -43,12 +45,19 @@ function LoginModal(props) {
           });
           localStorage.setItem("user", data.user);
           localStorage.setItem("displayName", data.displayName);
-          document.querySelector(".modal-backdrop").remove();
+          props.setGalleryData(
+            await getGalleryData(data.user, props.getGalleryApi)
+          );
+          const modalEl = document.getElementById("loginModal");
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal.hide();
         }
       }
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
+    // TODO: clear input fields;
   }
 
   return (

@@ -6,8 +6,9 @@ import RegisterModal from "./RegisterModal";
 import FizzgenModal from "./FizzgenModal";
 import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./Gallery";
+import TransferModal from "./TransferModal";
 
-const dev = false;
+const dev = true;
 
 const GET_GALLERY_API = dev
   ? "http://localhost:8080/api/getGallery"
@@ -24,6 +25,8 @@ function App() {
   const [gallery, setGallery] = useState(null);
   // State variable that holds data on all of a logged in user's fizzgens
   const [galleryData, setGalleryData] = useState(null);
+  //State variable that holds data on fizzgen to be transferred
+  const [toTransfer, setToTransfer] = useState(null);
 
   useMemo(async () => {
     if (window) {
@@ -35,7 +38,7 @@ function App() {
           displayName: displayName,
         };
         setLoggedInUser(user);
-        setGalleryData(await getGalleryData(user, GET_GALLERY_API));
+        setGalleryData(await getGalleryData(email, GET_GALLERY_API));
       }
     }
   }, []);
@@ -48,13 +51,13 @@ function App() {
         setGallery={setGallery}
         gallery={gallery}
       />
-      {!loggedInUser && (
-        <LoginModal
-          loggedInUser={loggedInUser}
-          setLoggedInUser={setLoggedInUser}
-          dev={dev}
-        />
-      )}
+      <LoginModal
+        loggedInUser={loggedInUser}
+        setLoggedInUser={setLoggedInUser}
+        dev={dev}
+        getGalleryApi={GET_GALLERY_API}
+        setGalleryData={setGallery}
+      />
       {!loggedInUser && (
         <RegisterModal
           loggedInUser={loggedInUser}
@@ -63,6 +66,14 @@ function App() {
         />
       )}
       <FizzgenModal step1={step1} step2={step2} step3={step3} />
+      <TransferModal
+        toTransfer={toTransfer}
+        setToTransfer={setToTransfer}
+        loggedInUser={loggedInUser}
+        dev={dev}
+        setGalleryData={setGalleryData}
+        getGalleryApi={GET_GALLERY_API}
+      />
       {!gallery && (
         <WebcamSuite
           loggedInUser={loggedInUser}
@@ -78,7 +89,13 @@ function App() {
           setGalleryData={setGalleryData}
         />
       )}
-      {gallery && <Gallery galleryData={galleryData} />}
+      {gallery && (
+        <Gallery
+          galleryData={galleryData}
+          loggedInUser={loggedInUser}
+          setToTransfer={setToTransfer}
+        />
+      )}
     </div>
   );
 }
