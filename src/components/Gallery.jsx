@@ -2,10 +2,16 @@ import React from "react";
 import GalleryCard from "./GalleryCard";
 
 function Gallery(props) {
+  let reversedGalleryData;
+
+  if (props.galleryData) {
+    reversedGalleryData = props.galleryData.slice().reverse();
+  }
+
   return (
     <div id="gallery-main-div" className="row mt-2 ps-2 pe-2">
       {props.galleryData &&
-        props.galleryData.map((fizz, index) => {
+        reversedGalleryData.map((fizz, index) => {
           return (
             <GalleryCard
               key={index}
