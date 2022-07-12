@@ -2,36 +2,39 @@ import React, { useState } from "react";
 import Webcam from "react-webcam";
 import CamButton from "./CamButton";
 import FilterSuite from "./FilterSuite";
-import getGalleryData from "../utils/GetGalleryData.mjs";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
+  // State variable to hold captured (unfiltered) image
   const [imgSrc, setImgSrc] = useState(null);
-  const [imgCaptured, setImgCaptured] = useState(false);
-  const [filter, setFilter] = useState(null);
+  // State variable indicating which filter has been applied to webcam image
+  const [appliedFilter, setAppliedFilter] = useState(null);
+  // State variable to hold filtered image
   const [filteredImg, setFilteredImg] = useState(null);
 
+  // Options/config of webcam
   const videoConstraints = {
     width: 360,
     height: 360,
     facingMode: "user",
   };
 
+  // Captures webcam image
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot({
       width: 360,
       height: 360,
     });
     setImgSrc(imageSrc);
-    setImgCaptured(true);
   }, [webcamRef, setImgSrc]);
 
+  // Removes all filters and resets webcam
   function reset() {
     setImgSrc(null);
-    setImgCaptured(false);
-    setFilter(null);
     setFilteredImg(null);
+    setAppliedFilter(null);
     const canvas = document.querySelector("canvas");
     if (canvas) {
       canvas.remove();
@@ -155,7 +158,7 @@ function WebcamSuite(props) {
                   setTimeout(() => {
                     props.setGallery(true);
                     resetAndDismiss();
-                  }, 4 * 1000);
+                  }, 2 * 1000);
                 }
               }
             }
@@ -186,7 +189,7 @@ function WebcamSuite(props) {
           )}
 
           {/* Once image has been captured (but before filter is applied), display captured image */}
-          {imgSrc && !filter && (
+          {imgSrc && !filteredImg && (
             <img
               id="captured-img"
               className="img-captured center-block"
@@ -209,19 +212,19 @@ function WebcamSuite(props) {
 
       {/* Capture button appears until image is captured, then becomes reset button */}
       <div className="row mt-2">
-        {!imgCaptured && (
+        {!imgSrc && (
           <CamButton label="capture" handler={capture} primary={true} />
         )}
-        {imgCaptured && <CamButton label="reset" handler={reset} />}
+        {imgSrc && <CamButton label="reset" handler={reset} />}
       </div>
 
       {/* Filter drop down button appears after image is captured */}
       <div className="row mt-2">
-        {imgCaptured && (
+        {imgSrc && (
           <FilterSuite
             imgSrc={imgSrc}
-            filter={filter}
-            setFilter={setFilter}
+            appliedFilter={appliedFilter}
+            setAppliedFilter={setAppliedFilter}
             filteredImg={filteredImg}
             setFilteredImg={setFilteredImg}
           />
@@ -230,7 +233,7 @@ function WebcamSuite(props) {
 
       {/* If logged in Fizzgen me button appears once filter is applied (or none is selected), otherwise login button*/}
       <div className="row mt-2" id="fizzgen-me-row">
-        {filter && props.loggedInUser && (
+        {filteredImg && props.loggedInUser && (
           <CamButton
             label="fizzgen me!"
             primary={true}
@@ -239,7 +242,7 @@ function WebcamSuite(props) {
             target="#fizzgen-modal"
           />
         )}
-        {filter && !props.loggedInUser && (
+        {filteredImg && !props.loggedInUser && (
           <CamButton
             label="login to enable fizzgen creation"
             primary={true}

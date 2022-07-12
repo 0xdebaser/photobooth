@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as bootstrap from "bootstrap";
 import { ethers } from "ethers";
-import getGalleryData from "../utils/GetGalleryData.mjs";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 
 function TransferModal(props) {
   //don't forget to delete this VVV

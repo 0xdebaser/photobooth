@@ -1,16 +1,13 @@
 import React from "react";
+import filtersInUse from "./filtersInUse.mjs";
 
 function FilterSuite(props) {
   const PixelsJS = window.pixelsJS;
-  const filters = PixelsJS.getFilterList()
-    .sort()
-    .map((filter) => filter.replace(/_/g, " "));
 
-  filters.unshift("none");
+  const filtersArray = Object.keys(filtersInUse).sort();
+  filtersArray.unshift("none");
 
   function applyFilter(filter) {
-    const filterArg = filter.replace(/\s/g, "_");
-
     //Get rid of any exisitng filtered image
     const canvas = document.querySelector("canvas");
     if (canvas) {
@@ -21,7 +18,7 @@ function FilterSuite(props) {
     const imageEl = document.getElementById("to-be-replaced");
     const imageElCopy = imageEl;
 
-    props.setFilter(filter);
+    props.setAppliedFilter(filter);
 
     if (filter === "none") {
       const [canvas] = imgToCanvas(imageEl);
@@ -31,7 +28,7 @@ function FilterSuite(props) {
       return;
     }
 
-    PixelsJS.filterImg(imageEl, filterArg);
+    PixelsJS.filterImg(imageEl, filtersInUse[filter]);
     canvasContainer.append(imageElCopy);
     const targetCanvas = document.querySelector("canvas");
     const canvasImgData = targetCanvas.toDataURL("image/jpeg");
@@ -61,7 +58,7 @@ function FilterSuite(props) {
     <div>
       <div className="col text-center">
         <div className="dropdown">
-          {!props.filter && (
+          {!props.appliedFilter && (
             <div>
               <button
                 className="btn btn-secondary dropdown-toggle"
@@ -76,7 +73,7 @@ function FilterSuite(props) {
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton1"
               >
-                {filters.map((filter, index) => (
+                {filtersArray.map((filter, index) => (
                   <li
                     key={index}
                     className="dropdown-item filter-list-item"
@@ -88,7 +85,7 @@ function FilterSuite(props) {
               </ul>
             </div>
           )}
-          {props.filter && (
+          {props.appliedFilter && (
             <div>
               <button
                 className="btn btn-primary dropdown-toggle"
@@ -97,13 +94,13 @@ function FilterSuite(props) {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {props.filter}
+                {props.appliedFilter}
               </button>
               <ul
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton1"
               >
-                {filters.map((filter, index) => (
+                {filtersArray.map((filter, index) => (
                   <li
                     key={index}
                     className="dropdown-item filter-list-item"

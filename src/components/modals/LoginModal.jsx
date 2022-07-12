@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import getGalleryData from "../utils/GetGalleryData.mjs";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
 
 function LoginModal(props) {

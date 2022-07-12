@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from "react";
-import Navbar from "./Navbar";
-import WebcamSuite from "./WebcamSuite";
-import LoginModal from "./LoginModal";
-import RegisterModal from "./RegisterModal";
-import FizzgenModal from "./FizzgenModal";
+import Navbar from "./nav/Navbar";
+import WebcamSuite from "./camera/WebcamSuite";
+import LoginModal from "./modals/LoginModal";
+import RegisterModal from "./modals/RegisterModal";
+import FizzgenModal from "./modals/FizzgenModal";
 import getGalleryData from "../utils/GetGalleryData.mjs";
-import Gallery from "./Gallery";
-import TransferModal from "./TransferModal";
+import Gallery from "./gallery/Gallery";
+import TransferModal from "./modals/TransferModal";
 
 const dev = false;
 
@@ -28,6 +28,7 @@ function App() {
   //State variable that holds data on fizzgen to be transferred
   const [toTransfer, setToTransfer] = useState(null);
 
+  // Runs once upon loading to load gallery data if there is a logged in user
   useMemo(async () => {
     if (window) {
       if (localStorage.getItem("user")) {
