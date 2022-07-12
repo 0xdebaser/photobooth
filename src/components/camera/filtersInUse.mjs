@@ -17,7 +17,7 @@ const filtersInUse = {
   "whizzpopper flurry": "incbrightness2",
   invert: "invert",
   neue: "neue",
-  perfume: "prefume",
+  perfume: "perfume",
   retroviolet: "retroviolet",
   ryo: "ryo",
   solange: "solange",

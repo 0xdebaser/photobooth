@@ -55,64 +55,28 @@ function FilterSuite(props) {
   };
 
   return (
-    <div>
-      <div className="col text-center">
-        <div className="dropdown">
-          {!props.appliedFilter && (
-            <div>
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="filter-dropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+    <div className="col col-6 offset-3 col-md-4 offset-md-4 col-xl-2 offset-xl-5 text-center ml-auto mr-auto">
+      <div>
+        <select
+          className="form-select text-center"
+          id="filter-select"
+          aria-label="Filter select"
+          defaultValue="choose filter:"
+          onChange={(event) => applyFilter(event.target.value)}
+        >
+          <option>choose filter:</option>
+          {filtersArray.map((filter, index) => {
+            return (
+              <option
+                value={filter}
+                key={index}
+                onClick={() => applyFilter(filter)}
               >
-                choose filter
-              </button>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="dropdownMenuButton1"
-              >
-                {filtersArray.map((filter, index) => (
-                  <li
-                    key={index}
-                    className="dropdown-item filter-list-item"
-                    onClick={() => applyFilter(filter)}
-                  >
-                    {filter}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {props.appliedFilter && (
-            <div>
-              <button
-                className="btn btn-primary dropdown-toggle"
-                type="button"
-                id="filter-dropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {props.appliedFilter}
-              </button>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="dropdownMenuButton1"
-              >
-                {filtersArray.map((filter, index) => (
-                  <li
-                    key={index}
-                    className="dropdown-item filter-list-item"
-                    onClick={() => applyFilter(filter)}
-                  >
-                    {filter}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+                {filter}
+              </option>
+            );
+          })}
+        </select>
       </div>
     </div>
   );
