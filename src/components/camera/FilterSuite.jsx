@@ -4,6 +4,7 @@ import filtersInUse from "./filtersInUse.mjs";
 function FilterSuite(props) {
   const PixelsJS = window.pixelsJS;
 
+  // Generate array of filter names from imported filters object
   const filtersArray = Object.keys(filtersInUse).sort();
   filtersArray.unshift("none");
 
@@ -20,19 +21,22 @@ function FilterSuite(props) {
 
     props.setAppliedFilter(filter);
 
-    if (filter === "none") {
-      const [canvas] = imgToCanvas(imageEl);
-      replaceImgElement(canvas, imageEl);
-      canvasContainer.append(imageElCopy);
-      props.setFilteredImg(props.imgSrc);
-      return;
-    }
+    switch (filter) {
+      case "none":
+        const [canvas] = imgToCanvas(imageEl);
+        replaceImgElement(canvas, imageEl);
+        canvasContainer.append(imageElCopy);
+        props.setFilteredImg(props.imgSrc);
+        break;
 
-    PixelsJS.filterImg(imageEl, filtersInUse[filter]);
-    canvasContainer.append(imageElCopy);
-    const targetCanvas = document.querySelector("canvas");
-    const canvasImgData = targetCanvas.toDataURL("image/jpeg");
-    props.setFilteredImg(canvasImgData);
+      // Default handles any of the PixelsJS filters
+      default:
+        PixelsJS.filterImg(imageEl, filtersInUse[filter]);
+        canvasContainer.append(imageElCopy);
+        const targetCanvas = document.querySelector("canvas");
+        const canvasImgData = targetCanvas.toDataURL("image/jpeg");
+        props.setFilteredImg(canvasImgData);
+    }
   }
 
   //Helper function from pixels.js
