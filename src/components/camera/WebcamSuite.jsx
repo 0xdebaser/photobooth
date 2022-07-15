@@ -4,6 +4,7 @@ import CamButton from "./CamButton";
 import FilterSuite from "./FilterSuite";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
+import { Pixelify } from "react-pixelify";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
@@ -13,6 +14,8 @@ function WebcamSuite(props) {
   const [appliedFilter, setAppliedFilter] = useState(null);
   // State variable to hold filtered image
   const [filteredImg, setFilteredImg] = useState(null);
+  // State variable that affects level of pixelation when 8bit filter is applied
+  const [pixLevel, setPixLevel] = useState(12);
 
   // Options/config of webcam
   const videoConstraints = {
@@ -32,13 +35,13 @@ function WebcamSuite(props) {
 
   // Removes all filters and resets webcam
   function reset() {
+    const canvas = document.querySelector("canvas");
+    if (canvas && appliedFilter !== "8bit") {
+      canvas.remove();
+    }
     setImgSrc(null);
     setFilteredImg(null);
     setAppliedFilter(null);
-    const canvas = document.querySelector("canvas");
-    if (canvas) {
-      canvas.remove();
-    }
   }
 
   async function fizzgenMe() {
@@ -57,6 +60,9 @@ function WebcamSuite(props) {
         ? "http://localhost:8080/api/generate"
         : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/generate";
 
+      const STORE_ENDPOINT =
+        "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/store-nft-data";
+
       props.setStep1("started");
       props.setStep2(null);
       props.setStep3(null);
@@ -70,7 +76,7 @@ function WebcamSuite(props) {
         image: filteredImg,
       };
       const storageTarget = GENERATE_API + "/store";
-      const response = await fetch(storageTarget, {
+      const response = await fetch(STORE_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +195,7 @@ function WebcamSuite(props) {
           )}
 
           {/* Once image has been captured (but before filter is applied), display captured image */}
-          {imgSrc && !filteredImg && (
+          {imgSrc && !filteredImg && appliedFilter !== "8bit" && (
             <img
               id="captured-img"
               className="img-captured center-block"
@@ -197,7 +203,6 @@ function WebcamSuite(props) {
               alt="captured from webcam"
             />
           )}
-
           {/* Once filter is applied, this displays the filtered image */}
           <div id="canvas-container">
             <img
@@ -207,6 +212,10 @@ function WebcamSuite(props) {
               hidden
             />
           </div>
+          {/* This only is active when the 8 bit filter is in use */}
+          {appliedFilter === "8bit" && (
+            <Pixelify src={imgSrc} pixelSize={pixLevel} />
+          )}
         </div>
       </div>
 
@@ -227,6 +236,8 @@ function WebcamSuite(props) {
             setAppliedFilter={setAppliedFilter}
             filteredImg={filteredImg}
             setFilteredImg={setFilteredImg}
+            pixLevel={pixLevel}
+            setPixLevel={setPixLevel}
           />
         )}
       </div>

@@ -1,61 +1,95 @@
 import React, { useState } from "react";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
+import { Config } from "aws-sdk";
+import {
+  CognitoUserAttribute,
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from "amazon-cognito-identity-js";
+import * as AWS from "aws-sdk/global";
 
 function LoginModal(props) {
-  // This one is for production
-  const LOGIN_API = props.dev
-    ? "http://localhost:8080/api/login"
-    : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/login";
-
+  // State variable used to toggle loading spinner
   const [loading, setLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(null);
 
   async function handler(event) {
     event.preventDefault();
     setLoading(true);
-    const email = event.target[0].value;
+    setLoginSuccess(null);
+
+    //Set variables based on input values
+    const username = event.target[0].value;
     const password = event.target[1].value;
-    const userData = {
-      email: email,
-      password: password,
+
+    // AWS/Cognito Config
+    const authenticationData = {
+      Username: username,
+      Password: password,
     };
+    const authenticationDetails = new AuthenticationDetails(authenticationData);
+    const poolData = {
+      UserPoolId: process.env.REACT_APP_USER_POOL_ID,
+      ClientId: process.env.REACT_APP_CLIENT_ID,
+    };
+    const userPool = new CognitoUserPool(poolData);
+    const userData = {
+      Username: username,
+      Pool: userPool,
+    };
+    const cognitoUser = new CognitoUser(userData);
 
-    //Send event data to API to create user
-    try {
-      const response = await fetch(LOGIN_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (result) => {
+        setLoginSuccess(0);
+        props.setLoggedInUser(result.user);
+        document.getElementById("login-form").reset();
+      },
 
-      if (response.status !== 200) {
-        alert(
-          `There has been a server error (${response.status}). Please register or try again.`
-        );
-      } else {
-        const data = await response.json();
-        if (data.result !== "success") {
-          alert(`${data.message} Please try again.`);
-        } else {
-          props.setLoggedInUser({
-            email: data.user,
-            displayName: data.displayName,
-          });
-          localStorage.setItem("user", data.user);
-          localStorage.setItem("displayName", data.displayName);
-          props.setGalleryData(
-            await getGalleryData(data.user, props.getGalleryApi)
-          );
-          const modalEl = document.getElementById("loginModal");
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          modal.hide();
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      onFailure: function (err) {
+        alert(err.message || JSON.stringify(err));
+        setLoginSuccess(1);
+      },
+    });
+
+    // //Send event data to API to create user
+    // try {
+    //   const response = await fetch(LOGIN_API, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(userData),
+    //   });
+
+    //   if (response.status !== 200) {
+    //     alert(
+    //       `There has been a server error (${response.status}). Please register or try again.`
+    //     );
+    //   } else {
+    //     const data = await response.json();
+    //     if (data.result !== "success") {
+    //       alert(`${data.message} Please try again.`);
+    //     } else {
+    //       props.setLoggedInUser({
+    //         email: data.user,
+    //         displayName: data.displayName,
+    //       });
+    //       localStorage.setItem("user", data.user);
+    //       localStorage.setItem("displayName", data.displayName);
+    //       props.setGalleryData(
+    //         await getGalleryData(data.user, props.getGalleryApi)
+    //       );
+    //       const modalEl = document.getElementById("loginModal");
+    //       const modal = bootstrap.Modal.getInstance(modalEl);
+    //       modal.hide();
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
     setLoading(false);
     // TODO: clear input fields;
   }
@@ -82,31 +116,31 @@ function LoginModal(props) {
             ></button>
           </div>
           <div className="modal-body">
-            <form onSubmit={(event) => handler(event)}>
+            <form id="login-form" onSubmit={(event) => handler(event)}>
               <div className="mb-3">
-                <label htmlFor="loginInputEmail1" className="form-label">
-                  email address
+                <label htmlFor="login-username" className="form-label">
+                  username
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
-                  id="loginInputEmail1"
-                  aria-describedby="emailHelp"
+                  id="login-username"
+                  aria-describedby="loginUsername"
                   required
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="loginInputPassword1" className="form-label">
+                <label htmlFor="login-password" className="form-label">
                   password
                 </label>
                 <input
                   type="password"
                   className="form-control"
-                  id="loginInputPassword1"
+                  id="login-password"
                   required
                 />
               </div>
-              {!loading && (
+              {!loading && loginSuccess !== 0 && (
                 <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
@@ -118,6 +152,16 @@ function LoginModal(props) {
                 ></div>
               )}
             </form>
+            {loginSuccess === 0 && (
+              <div>
+                <p>You were successfully logged in.</p>
+              </div>
+            )}
+            {loginSuccess === 1 && (
+              <div>
+                <p>Login failed. Please try again.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

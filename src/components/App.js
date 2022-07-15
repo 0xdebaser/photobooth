@@ -30,18 +30,27 @@ function App() {
 
   // Runs once upon loading to load gallery data if there is a logged in user
   useMemo(async () => {
-    if (window) {
-      if (localStorage.getItem("user")) {
-        const email = window.localStorage.getItem("user");
-        const displayName = window.localStorage.getItem("displayName");
-        const user = {
-          email: email,
-          displayName: displayName,
-        };
-        setLoggedInUser(user);
-        setGalleryData(await getGalleryData(email, GET_GALLERY_API));
-      }
-    }
+    const user = {
+      email: "jason@jason.com",
+      displayName: "Jason",
+    };
+    setLoggedInUser(user);
+    //   if (window) {
+    //     const user = {
+    //       email: "jason@jason.com",
+    //       displayName: "Jason"
+    //     }
+    // if (localStorage.getItem("user")) {
+    //   const email = window.localStorage.getItem("user");
+    //   const displayName = window.localStorage.getItem("displayName");
+    //   const user = {
+    //     email: email,
+    //     displayName: displayName,
+    //   };
+    //       setLoggedInUser(user);
+    //       setGalleryData(await getGalleryData(email, GET_GALLERY_API));
+    //     }
+    //   }
   }, []);
 
   return (

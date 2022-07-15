@@ -17,7 +17,7 @@ function Navbar(props) {
             {!props.loggedInUser && (
               <NavbarButton
                 label="register"
-                modal="#registerModal"
+                modal="#register-modal"
                 toggle="modal"
               />
             )}
