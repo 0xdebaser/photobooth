@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import getGalleryData from "../../utils/GetGalleryData.mjs";
-
+import React from "react";
 import { Authenticator } from "@aws-amplify/ui-react";
 
-function LoginModal(props) {
+function LoginModal() {
   return (
     <div
       className="modal fade"
@@ -29,53 +27,6 @@ function LoginModal(props) {
             <div>
               <Authenticator></Authenticator>
             </div>
-
-            {/* <form id="login-form" onSubmit={(event) => handler(event)}>
-              <div className="mb-3">
-                <label htmlFor="login-username" className="form-label">
-                  username
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="login-username"
-                  aria-describedby="loginUsername"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="login-password" className="form-label">
-                  password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="login-password"
-                  required
-                />
-              </div>
-              {!loading && loginSuccess !== 0 && (
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              )}
-              {loading && (
-                <div
-                  className="spinner-border text-primary"
-                  role="status"
-                ></div>
-              )}
-            </form>
-            {loginSuccess === 0 && (
-              <div>
-                <p>You were successfully logged in.</p>
-              </div>
-            )}
-            {loginSuccess === 1 && (
-              <div>
-                <p>Login failed. Please try again.</p>
-              </div>
-            )} */}
           </div>
         </div>
       </div>

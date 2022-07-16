@@ -35,7 +35,7 @@ function TransferModal(props) {
       setLoading(true);
       event.preventDefault();
       const transferData = {
-        email: props.loggedInUser.email,
+        email: props.user.attributes.email,
         password: document.getElementById("transfer-input-password").value,
         transferType: internalTransfer ? "internal" : "external",
         recipientEmail: internalTransfer
@@ -71,7 +71,10 @@ function TransferModal(props) {
           // Display success message, update gallery data, and dismiss modal after slight delay
           setLoading("finished");
           props.setGalleryData(
-            await getGalleryData(props.loggedInUser.email, props.getGalleryApi)
+            await getGalleryData(
+              props.user.attributes.email,
+              props.getGalleryApi
+            )
           );
           setTimeout(() => {
             const modalEl = document.getElementById("transfer-modal");

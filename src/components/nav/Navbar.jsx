@@ -1,6 +1,7 @@
 import React from "react";
 import NavbarButton from "./NavbarButton";
 import { Auth } from "aws-amplify";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 
 function Navbar(props) {
   return (
@@ -24,8 +25,14 @@ function Navbar(props) {
             {!props.gallery && props.user && (
               <NavbarButton
                 label="gallery"
-                onClick={() => {
+                onClick={async () => {
                   props.setGallery(true);
+                  props.setGalleryData(
+                    await getGalleryData(
+                      props.user.attributes.email,
+                      props.getGalleryApi
+                    )
+                  );
                 }}
               />
             )}

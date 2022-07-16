@@ -7,13 +7,9 @@ import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./gallery/Gallery";
 import TransferModal from "./modals/TransferModal";
 import * as bootstrap from "bootstrap";
-
 import { Amplify, Auth, Hub } from "aws-amplify";
-// import { withAuthenticator } from "@aws-amplify/ui-react-v1";
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
-import { CognitoUser } from "amazon-cognito-identity-js";
 
 Amplify.configure(awsExports);
 
@@ -64,7 +60,6 @@ function App() {
     getUser().then(async (userData) => {
       try {
         setUser(userData);
-        console.log(user.attributes.email);
         if (user.attributes) {
           setGalleryData(
             await getGalleryData(user.attributes.email, GET_GALLERY_API)
@@ -76,6 +71,7 @@ function App() {
     });
   }, []);
 
+  // Helper function for useEffect functions
   function getUser() {
     return Auth.currentAuthenticatedUser()
       .then((userData) => userData)
@@ -85,30 +81,22 @@ function App() {
   return (
     <div>
       <Navbar
-        loggedInUser={loggedInUser}
-        setLoggedInUser={setLoggedInUser}
         setGallery={setGallery}
         gallery={gallery}
+        setGalleryData={setGalleryData}
         user={user}
         setUser={setUser}
-      />
-
-      <LoginModal
-        loggedInUser={loggedInUser}
-        setLoggedInUser={setLoggedInUser}
-        dev={dev}
         getGalleryApi={GET_GALLERY_API}
-        setGalleryData={setGallery}
       />
-
+      <LoginModal />
       <FizzgenModal step1={step1} step2={step2} step3={step3} />
       <TransferModal
         toTransfer={toTransfer}
         setToTransfer={setToTransfer}
-        loggedInUser={loggedInUser}
         dev={dev}
         setGalleryData={setGalleryData}
         getGalleryApi={GET_GALLERY_API}
+        user={user}
       />
       {!gallery && (
         <WebcamSuite
@@ -128,7 +116,7 @@ function App() {
       {gallery && (
         <Gallery
           galleryData={galleryData}
-          loggedInUser={loggedInUser}
+          user={user}
           setToTransfer={setToTransfer}
         />
       )}
@@ -137,5 +125,3 @@ function App() {
 }
 
 export default App;
-
-// function withAuthenticator(Comp, includeGreetings = false, authenticatorComponents = [], federated = null, theme = null, signUpConfig = {})
