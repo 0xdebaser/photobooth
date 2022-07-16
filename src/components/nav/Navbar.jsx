@@ -1,35 +1,39 @@
 import React from "react";
 import NavbarButton from "./NavbarButton";
-import LoginButton from "./LoginButton";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 
 function Navbar(props) {
   return (
     <div>
       <nav className="navbar navbar-expand-sm" id="nav-main">
         <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1 fs-2 text-brand">fizzgen</span>
+          <span className="navbar-brand mb-0 h1 fs-2 text-brand">
+            fizzgen{" "}
+            {props.user && `x ${props.user.attributes["custom:artistName"]}`}
+          </span>
           <ul className="navbar-nav">
-            {props.loggedInUser && (
-              <div id="nav-display-name" className="ms-2 mt-2">
-                <li>{props.loggedInUser.displayName}</li>
-              </div>
-            )}
-            {!props.loggedInUser && (
+            {!props.user && (
               <NavbarButton
-                label="register"
-                modal="#registerModal"
+                label="login or register"
                 toggle="modal"
+                modal="#loginModal"
               />
             )}
-            {!props.gallery && props.loggedInUser && (
+            {!props.gallery && props.user && (
               <NavbarButton
                 label="gallery"
-                onClick={() => {
+                onClick={async () => {
                   props.setGallery(true);
+                  props.setGalleryData(
+                    await getGalleryData(
+                      props.user.attributes.email,
+                      props.getGalleryApi
+                    )
+                  );
                 }}
               />
             )}
-            {props.gallery && props.loggedInUser && (
+            {props.gallery && props.user && (
               <NavbarButton
                 label="camera"
                 onClick={() => {
@@ -37,21 +41,14 @@ function Navbar(props) {
                 }}
               />
             )}
-            {!props.loggedInUser && (
-              <LoginButton
-                loggedInUser={props.loggedInUser}
-                setLoggedInUser={props.setLoggedInUser}
-                modal="#loginModal"
-                toggle="modal"
-              />
-            )}
-            {props.loggedInUser && (
+            {props.user && (
               <NavbarButton
-                label="logout"
+                label="sign out"
                 onClick={() => {
-                  props.setLoggedInUser(null);
-                  localStorage.clear();
-                  props.setGallery(null);
+                  props.user.signOut();
+                  props.setUser(null);
+                  window.location.reload();
+                  return false;
                 }}
                 modal={null}
               />

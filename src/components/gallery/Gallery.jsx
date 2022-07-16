@@ -25,7 +25,7 @@ function Gallery(props) {
               contract={fizz.contract}
               minter={fizz.minter}
               _id={fizz._id}
-              loggedInUser={props.loggedInUser}
+              user={props.user}
               setToTransfer={props.setToTransfer}
               transferTxn={fizz.transferTxnHash ? fizz.transferTxnHash : null}
             />

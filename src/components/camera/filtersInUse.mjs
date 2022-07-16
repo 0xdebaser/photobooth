@@ -1,4 +1,5 @@
 const filtersInUse = {
+  "8bit": "8bit",
   aeon: "aeon",
   blues: "blues",
   "alien xray": "cool_twilight",

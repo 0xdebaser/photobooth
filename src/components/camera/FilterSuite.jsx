@@ -4,35 +4,49 @@ import filtersInUse from "./filtersInUse.mjs";
 function FilterSuite(props) {
   const PixelsJS = window.pixelsJS;
 
+  // Generate array of filter names from imported filters object
   const filtersArray = Object.keys(filtersInUse).sort();
   filtersArray.unshift("none");
 
   function applyFilter(filter) {
     //Get rid of any exisitng filtered image
-    const canvas = document.querySelector("canvas");
-    if (canvas) {
-      canvas.remove();
+    if (props.appliedFilter !== "8bit") {
+      const canvas = document.querySelector("canvas");
+      if (canvas) {
+        canvas.remove();
+      }
     }
+
+    props.setAppliedFilter(filter);
 
     const canvasContainer = document.getElementById("canvas-container");
     const imageEl = document.getElementById("to-be-replaced");
     const imageElCopy = imageEl;
 
-    props.setAppliedFilter(filter);
+    switch (filter) {
+      case "none":
+        const [canvas] = imgToCanvas(imageEl);
+        replaceImgElement(canvas, imageEl);
+        canvasContainer.append(imageElCopy);
+        props.setFilteredImg(props.imgSrc);
+        break;
 
-    if (filter === "none") {
-      const [canvas] = imgToCanvas(imageEl);
-      replaceImgElement(canvas, imageEl);
-      canvasContainer.append(imageElCopy);
-      props.setFilteredImg(props.imgSrc);
-      return;
+      case "8bit":
+        const targCanvas = document.querySelector("canvas");
+        if (targCanvas) {
+          const canvasImageData = targCanvas.toDataURL("image/jpeg");
+          props.setFilteredImg(canvasImageData);
+        }
+        break;
+
+      // Default handles any of the PixelsJS filters
+      default:
+        PixelsJS.filterImg(imageEl, filtersInUse[filter]);
+        canvasContainer.append(imageElCopy);
+        const targetCanvas = document.querySelector("canvas");
+        const canvasImgData = targetCanvas.toDataURL("image/jpeg");
+        props.setFilteredImg(canvasImgData);
     }
-
-    PixelsJS.filterImg(imageEl, filtersInUse[filter]);
-    canvasContainer.append(imageElCopy);
-    const targetCanvas = document.querySelector("canvas");
-    const canvasImgData = targetCanvas.toDataURL("image/jpeg");
-    props.setFilteredImg(canvasImgData);
   }
 
   //Helper function from pixels.js
@@ -77,6 +91,27 @@ function FilterSuite(props) {
             );
           })}
         </select>
+        {props.appliedFilter === "8bit" && (
+          <div>
+            <label htmlFor="pixelation-range" className="form-label mt-2">
+              Pixelation level
+            </label>
+
+            <input
+              type="range"
+              className="form-range"
+              min="1"
+              max="50"
+              step="1"
+              id="pixelation-range"
+              value={props.pixLevel}
+              onChange={(event) => {
+                props.setPixLevel(parseInt(event.target.value));
+                applyFilter("8bit");
+              }}
+            ></input>
+          </div>
+        )}
       </div>
     </div>
   );

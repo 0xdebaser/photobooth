@@ -4,6 +4,7 @@ import CamButton from "./CamButton";
 import FilterSuite from "./FilterSuite";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
+import { Pixelify } from "react-pixelify";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
@@ -13,6 +14,8 @@ function WebcamSuite(props) {
   const [appliedFilter, setAppliedFilter] = useState(null);
   // State variable to hold filtered image
   const [filteredImg, setFilteredImg] = useState(null);
+  // State variable that affects level of pixelation when 8bit filter is applied
+  const [pixLevel, setPixLevel] = useState(12);
 
   // Options/config of webcam
   const videoConstraints = {
@@ -32,13 +35,13 @@ function WebcamSuite(props) {
 
   // Removes all filters and resets webcam
   function reset() {
+    const canvas = document.querySelector("canvas");
+    if (canvas && appliedFilter !== "8bit") {
+      canvas.remove();
+    }
     setImgSrc(null);
     setFilteredImg(null);
     setAppliedFilter(null);
-    const canvas = document.querySelector("canvas");
-    if (canvas) {
-      canvas.remove();
-    }
   }
 
   async function fizzgenMe() {
@@ -57,6 +60,9 @@ function WebcamSuite(props) {
         ? "http://localhost:8080/api/generate"
         : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/generate";
 
+      const STORE_ENDPOINT =
+        "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/store-nft-data";
+
       props.setStep1("started");
       props.setStep2(null);
       props.setStep3(null);
@@ -64,13 +70,13 @@ function WebcamSuite(props) {
       const currentUTC = currentDate.toUTCString();
 
       const nftData = {
-        email: props.loggedInUser.email,
+        email: props.user.attributes.email,
         name: "Fizzgen",
-        description: `Fizzgen originally created by ${props.loggedInUser.displayName} at ${currentUTC}.`,
+        description: `Fizzgen originally created by ${props.user.username} at ${currentUTC}.`,
         image: filteredImg,
       };
       const storageTarget = GENERATE_API + "/store";
-      const response = await fetch(storageTarget, {
+      const response = await fetch(STORE_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,8 +131,8 @@ function WebcamSuite(props) {
               nftData.tokenId = data2.tokenID;
               nftData.mintTxn = data2.txnHash;
               nftData.originalCreationDate = currentUTC;
-              nftData.minter = props.loggedInUser.email;
-              nftData.owner = props.loggedInUser.email;
+              nftData.minter = props.user.attributes.email;
+              nftData.owner = props.user.attributes.email;
               delete nftData.image;
               //Send data to server
               const addTarget = GENERATE_API + "/add";
@@ -151,7 +157,7 @@ function WebcamSuite(props) {
                   props.setStep3("finished");
                   props.setGalleryData(
                     await getGalleryData(
-                      props.loggedInUser.email,
+                      props.user.attributes.email,
                       props.getGalleryApi
                     )
                   );
@@ -189,7 +195,7 @@ function WebcamSuite(props) {
           )}
 
           {/* Once image has been captured (but before filter is applied), display captured image */}
-          {imgSrc && !filteredImg && (
+          {imgSrc && !filteredImg && appliedFilter !== "8bit" && (
             <img
               id="captured-img"
               className="img-captured center-block"
@@ -197,7 +203,6 @@ function WebcamSuite(props) {
               alt="captured from webcam"
             />
           )}
-
           {/* Once filter is applied, this displays the filtered image */}
           <div id="canvas-container">
             <img
@@ -207,6 +212,10 @@ function WebcamSuite(props) {
               hidden
             />
           </div>
+          {/* This only is active when the 8 bit filter is in use */}
+          {appliedFilter === "8bit" && (
+            <Pixelify src={imgSrc} pixelSize={pixLevel} />
+          )}
         </div>
       </div>
 
@@ -227,13 +236,15 @@ function WebcamSuite(props) {
             setAppliedFilter={setAppliedFilter}
             filteredImg={filteredImg}
             setFilteredImg={setFilteredImg}
+            pixLevel={pixLevel}
+            setPixLevel={setPixLevel}
           />
         )}
       </div>
 
       {/* If logged in Fizzgen me button appears once filter is applied (or none is selected), otherwise login button*/}
       <div className="row mt-2" id="fizzgen-me-row">
-        {filteredImg && props.loggedInUser && (
+        {filteredImg && props.user && (
           <CamButton
             label="fizzgen me!"
             primary={true}
@@ -242,7 +253,7 @@ function WebcamSuite(props) {
             target="#fizzgen-modal"
           />
         )}
-        {filteredImg && !props.loggedInUser && (
+        {filteredImg && !props.user && (
           <CamButton
             label="login to enable fizzgen creation"
             primary={true}
