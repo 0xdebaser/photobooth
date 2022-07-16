@@ -70,9 +70,9 @@ function WebcamSuite(props) {
       const currentUTC = currentDate.toUTCString();
 
       const nftData = {
-        email: props.loggedInUser.email,
+        email: props.user.attributes.email,
         name: "Fizzgen",
-        description: `Fizzgen originally created by ${props.loggedInUser.displayName} at ${currentUTC}.`,
+        description: `Fizzgen originally created by ${props.user.username} at ${currentUTC}.`,
         image: filteredImg,
       };
       const storageTarget = GENERATE_API + "/store";
@@ -131,8 +131,8 @@ function WebcamSuite(props) {
               nftData.tokenId = data2.tokenID;
               nftData.mintTxn = data2.txnHash;
               nftData.originalCreationDate = currentUTC;
-              nftData.minter = props.loggedInUser.email;
-              nftData.owner = props.loggedInUser.email;
+              nftData.minter = props.user.attributes.email;
+              nftData.owner = props.user.attributes.email;
               delete nftData.image;
               //Send data to server
               const addTarget = GENERATE_API + "/add";
@@ -157,7 +157,7 @@ function WebcamSuite(props) {
                   props.setStep3("finished");
                   props.setGalleryData(
                     await getGalleryData(
-                      props.loggedInUser.email,
+                      props.user.attributes.email,
                       props.getGalleryApi
                     )
                   );
@@ -244,7 +244,7 @@ function WebcamSuite(props) {
 
       {/* If logged in Fizzgen me button appears once filter is applied (or none is selected), otherwise login button*/}
       <div className="row mt-2" id="fizzgen-me-row">
-        {filteredImg && props.loggedInUser && (
+        {filteredImg && props.user && (
           <CamButton
             label="fizzgen me!"
             primary={true}
@@ -253,7 +253,7 @@ function WebcamSuite(props) {
             target="#fizzgen-modal"
           />
         )}
-        {filteredImg && !props.loggedInUser && (
+        {filteredImg && !props.user && (
           <CamButton
             label="login to enable fizzgen creation"
             primary={true}

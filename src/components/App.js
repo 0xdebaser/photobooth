@@ -1,12 +1,21 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Navbar from "./nav/Navbar";
 import WebcamSuite from "./camera/WebcamSuite";
 import LoginModal from "./modals/LoginModal";
-import RegisterModal from "./modals/RegisterModal";
 import FizzgenModal from "./modals/FizzgenModal";
 import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./gallery/Gallery";
 import TransferModal from "./modals/TransferModal";
+import * as bootstrap from "bootstrap";
+
+import { Amplify, Auth, Hub } from "aws-amplify";
+// import { withAuthenticator } from "@aws-amplify/ui-react-v1";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
+import awsExports from "../aws-exports";
+import { CognitoUser } from "amazon-cognito-identity-js";
+
+Amplify.configure(awsExports);
 
 const dev = false;
 
@@ -16,6 +25,7 @@ const GET_GALLERY_API = dev
 
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
+  const [user, setUser] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
   // Steps are state variables used for the fizzgen creation modal
   const [step1, setStep1] = useState(null);
@@ -28,30 +38,49 @@ function App() {
   //State variable that holds data on fizzgen to be transferred
   const [toTransfer, setToTransfer] = useState(null);
 
-  // Runs once upon loading to load gallery data if there is a logged in user
-  useMemo(async () => {
-    const user = {
-      email: "jason@jason.com",
-      displayName: "Jason",
-    };
-    setLoggedInUser(user);
-    //   if (window) {
-    //     const user = {
-    //       email: "jason@jason.com",
-    //       displayName: "Jason"
-    //     }
-    // if (localStorage.getItem("user")) {
-    //   const email = window.localStorage.getItem("user");
-    //   const displayName = window.localStorage.getItem("displayName");
-    //   const user = {
-    //     email: email,
-    //     displayName: displayName,
-    //   };
-    //       setLoggedInUser(user);
-    //       setGalleryData(await getGalleryData(email, GET_GALLERY_API));
-    //     }
-    //   }
+  // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
+  useEffect(() => {
+    Hub.listen("auth", async ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          getUser().then((userData) => setUser(userData));
+          //Dismiss the sign in modal
+          const modalEl = document.getElementById("loginModal");
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal.hide();
+          setGalleryData(
+            await getGalleryData(user.attributes.email, GET_GALLERY_API)
+          );
+          break;
+        case "signOut":
+          setUser(null);
+          break;
+        case "signIn_failure":
+          console.log("Sign in failure", data);
+          break;
+      }
+    });
+
+    getUser().then(async (userData) => {
+      try {
+        setUser(userData);
+        console.log(user.attributes.email);
+        if (user.attributes) {
+          setGalleryData(
+            await getGalleryData(user.attributes.email, GET_GALLERY_API)
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
   }, []);
+
+  function getUser() {
+    return Auth.currentAuthenticatedUser()
+      .then((userData) => userData)
+      .catch(() => console.log("Not signed in"));
+  }
 
   return (
     <div>
@@ -60,7 +89,10 @@ function App() {
         setLoggedInUser={setLoggedInUser}
         setGallery={setGallery}
         gallery={gallery}
+        user={user}
+        setUser={setUser}
       />
+
       <LoginModal
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}
@@ -68,13 +100,7 @@ function App() {
         getGalleryApi={GET_GALLERY_API}
         setGalleryData={setGallery}
       />
-      {!loggedInUser && (
-        <RegisterModal
-          loggedInUser={loggedInUser}
-          setLoggedInUser={setLoggedInUser}
-          dev={dev}
-        />
-      )}
+
       <FizzgenModal step1={step1} step2={step2} step3={step3} />
       <TransferModal
         toTransfer={toTransfer}
@@ -86,7 +112,6 @@ function App() {
       />
       {!gallery && (
         <WebcamSuite
-          loggedInUser={loggedInUser}
           step1={step1}
           setStep1={setStep1}
           step2={step2}
@@ -97,6 +122,7 @@ function App() {
           getGalleryApi={GET_GALLERY_API}
           dev={dev}
           setGalleryData={setGalleryData}
+          user={user}
         />
       )}
       {gallery && (
@@ -111,3 +137,5 @@ function App() {
 }
 
 export default App;
+
+// function withAuthenticator(Comp, includeGreetings = false, authenticatorComponents = [], federated = null, theme = null, signUpConfig = {})
