@@ -1,6 +1,5 @@
 import React from "react";
 import NavbarButton from "./NavbarButton";
-import { Auth } from "aws-amplify";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 
 function Navbar(props) {
@@ -8,11 +7,9 @@ function Navbar(props) {
     <div>
       <nav className="navbar navbar-expand-sm" id="nav-main">
         <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1 fs-2">
-            <span className="text-brand">fizzgen </span>
-            <span id="text-artist">
-              {props.user && `by ${props.user.username}`}
-            </span>
+          <span className="navbar-brand mb-0 h1 fs-2 text-brand">
+            fizzgen{" "}
+            {props.user && `x ${props.user.attributes["custom:artistName"]}`}
           </span>
           <ul className="navbar-nav">
             {!props.user && (

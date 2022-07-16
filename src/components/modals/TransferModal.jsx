@@ -107,7 +107,6 @@ function TransferModal(props) {
             <h5 className="modal-title" id="loginModalLabel">
               transfer fizzgen no.{" "}
               {props.toTransfer ? props.toTransfer.tokenId : null}
-              {/* {` ${props.toTransfer.tokenId} ? props.toTransfer.tokenId : null}`} */}
             </h5>
             <button
               type="button"

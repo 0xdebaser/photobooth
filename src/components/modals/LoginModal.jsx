@@ -1,5 +1,7 @@
 import React from "react";
 import { Authenticator } from "@aws-amplify/ui-react";
+import components from "./Components.js";
+import formFields from "./FormFields.js";
 
 function LoginModal() {
   return (
@@ -25,7 +27,10 @@ function LoginModal() {
           </div>
           <div className="modal-body">
             <div>
-              <Authenticator></Authenticator>
+              <Authenticator
+                formFields={formFields}
+                components={components}
+              ></Authenticator>
             </div>
           </div>
         </div>

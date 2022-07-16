@@ -37,23 +37,27 @@ function App() {
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
   useEffect(() => {
     Hub.listen("auth", async ({ payload: { event, data } }) => {
-      switch (event) {
-        case "signIn":
-          getUser().then((userData) => setUser(userData));
-          //Dismiss the sign in modal
-          const modalEl = document.getElementById("loginModal");
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          modal.hide();
-          setGalleryData(
-            await getGalleryData(user.attributes.email, GET_GALLERY_API)
-          );
-          break;
-        case "signOut":
-          setUser(null);
-          break;
-        case "signIn_failure":
-          console.log("Sign in failure", data);
-          break;
+      try {
+        switch (event) {
+          case "signIn":
+            getUser().then((userData) => setUser(userData));
+            //Dismiss the sign in modal
+            const modalEl = document.getElementById("loginModal");
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+            setGalleryData(
+              await getGalleryData(user.attributes.email, GET_GALLERY_API)
+            );
+            break;
+          case "signOut":
+            setUser(null);
+            break;
+          case "signIn_failure":
+            console.log("Sign in failure", data);
+            break;
+        }
+      } catch (error) {
+        console.error(error);
       }
     });
 
