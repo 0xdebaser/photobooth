@@ -78,7 +78,7 @@ function TransferModal(props) {
             const modal = bootstrap.Modal.getInstance(modalEl);
             resetEverything();
             modal.hide();
-          }, 5 * 1000);
+          }, 2 * 1000);
         }
       }
     } catch (error) {
