@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Webcam from "react-webcam";
 import CamButton from "./CamButton";
 import FilterSuite from "./FilterSuite";
-import getGalleryData from "../../utils/GetGalleryData.mjs";
 import * as bootstrap from "bootstrap";
 import { Pixelify } from "react-pixelify";
+import getGalleryData from "../../utils/GetGalleryData.mjs";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
@@ -45,6 +45,7 @@ function WebcamSuite(props) {
   }
 
   async function fizzgenMe() {
+    // Resets state variables tracking fizzgen creation steps and dismisses fizzgen modal
     function resetAndDismiss() {
       props.setStep1(null);
       props.setStep2(null);
@@ -53,16 +54,16 @@ function WebcamSuite(props) {
       const modal = bootstrap.Modal.getInstance(modalEl);
       modal.hide();
     }
+    // Define API endpoints
+    const STORE_ENDPOINT =
+      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/store-nft-data";
+    const MINT_ENDPOINT =
+      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/mint";
+    const ADD_DATA_ENDPOINT =
+      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/add-data";
 
     try {
       //STEP 1: generate JSON data for NFT and send to generation server
-      const GENERATE_API = props.dev
-        ? "http://localhost:8080/api/generate"
-        : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/generate";
-
-      const STORE_ENDPOINT =
-        "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/store-nft-data";
-
       props.setStep1("started");
       props.setStep2(null);
       props.setStep3(null);
@@ -70,18 +71,18 @@ function WebcamSuite(props) {
       const currentUTC = currentDate.toUTCString();
 
       const nftData = {
-        email: props.user.attributes.email,
+        username: props.user.username,
         name: "Fizzgen",
-        description: `Fizzgen originally created by ${props.user.username} at ${currentUTC}.`,
+        description: `Fizzgen originally created by ${props.user.attributes["custom:artistName"]} at ${currentUTC}.`,
         image: filteredImg,
       };
-      const storageTarget = GENERATE_API + "/store";
+      const body = await JSON.stringify(nftData);
       const response = await fetch(STORE_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(nftData),
+        body: body,
       });
       if (response.status !== 200) {
         alert(
@@ -100,11 +101,10 @@ function WebcamSuite(props) {
 
           //STEP 2: mint NFT
           props.setStep2("started");
-          const mintTarget = GENERATE_API + "/mint";
           const mintData = {
             tokenUri: nftData.tokenURI,
           };
-          const response2 = await fetch(mintTarget, {
+          const response2 = await fetch(MINT_ENDPOINT, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -131,12 +131,12 @@ function WebcamSuite(props) {
               nftData.tokenId = data2.tokenID;
               nftData.mintTxn = data2.txnHash;
               nftData.originalCreationDate = currentUTC;
-              nftData.minter = props.user.attributes.email;
-              nftData.owner = props.user.attributes.email;
+              nftData.minter = props.user.username;
+              nftData.owner = props.user.username;
+              nftData.minterEmail = props.user.attributes.email;
               delete nftData.image;
               //Send data to server
-              const addTarget = GENERATE_API + "/add";
-              const response3 = await fetch(addTarget, {
+              const response3 = await fetch(ADD_DATA_ENDPOINT, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -157,8 +157,8 @@ function WebcamSuite(props) {
                   props.setStep3("finished");
                   props.setGalleryData(
                     await getGalleryData(
-                      props.user.attributes.email,
-                      props.getGalleryApi
+                      props.user.username,
+                      props.user.attributes.email
                     )
                   );
                   setTimeout(() => {

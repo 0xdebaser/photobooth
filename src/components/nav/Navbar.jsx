@@ -26,8 +26,8 @@ function Navbar(props) {
                   props.setGallery(true);
                   props.setGalleryData(
                     await getGalleryData(
-                      props.user.attributes.email,
-                      props.getGalleryApi
+                      props.user.username,
+                      props.user.attributes.email
                     )
                   );
                 }}

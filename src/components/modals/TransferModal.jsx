@@ -10,16 +10,15 @@ function TransferModal(props) {
   const [isValid, setIsValid] = useState(false);
 
   function handleRadioChange(event) {
-    console.log(event.target.name);
+    // console.log(event.target.name);
     if (event.target.name === "internalTransfer") {
       setInternalTransfer(true);
     } else setInternalTransfer(false);
-    console.log(internalTransfer ? "internal" : "external");
+    // console.log(internalTransfer ? "internal" : "external");
   }
 
   function resetEverything() {
     setLoading(false);
-    document.getElementById("transfer-input-password").value = "";
     if (document.getElementById("receive-email-address"))
       document.getElementById("receive-email-address").value = "";
     if (document.getElementById("receive-crypto-address"))
@@ -27,19 +26,17 @@ function TransferModal(props) {
   }
 
   async function handleSubmit(event) {
-    const TRANSFER_API = props.dev
-      ? "http://localhost:8080/api/transfer"
-      : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/transfer";
+    const TRANSFER_API =
+      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/transfer";
 
     try {
       setLoading(true);
       event.preventDefault();
       const transferData = {
         email: props.user.attributes.email,
-        password: document.getElementById("transfer-input-password").value,
         transferType: internalTransfer ? "internal" : "external",
-        recipientEmail: internalTransfer
-          ? document.getElementById("receive-email-address").value
+        recipient: internalTransfer
+          ? document.getElementById("internal-transfer-recipient").value
           : null,
         recipientCryptoAddress: internalTransfer
           ? null
@@ -72,8 +69,8 @@ function TransferModal(props) {
           setLoading("finished");
           props.setGalleryData(
             await getGalleryData(
-              props.user.attributes.email,
-              props.getGalleryApi
+              props.user.username,
+              props.user.attributes.email
             )
           );
           setTimeout(() => {
@@ -86,6 +83,7 @@ function TransferModal(props) {
       }
     } catch (error) {
       console.error(error);
+      resetEverything();
     }
   }
 
@@ -150,13 +148,16 @@ function TransferModal(props) {
               </div>
               {internalTransfer && (
                 <div className="mt-3">
-                  <label htmlFor="receive-email-address" className="form-label">
-                    email address <b>of user receiving transfer</b>
+                  <label
+                    htmlFor="internal-transfer-recipient"
+                    className="form-label"
+                  >
+                    email address or username <b>of user receiving transfer</b>
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control"
-                    id="receive-email-address"
+                    id="internal-transfer-recipient"
                     aria-describedby="emailHelp"
                     required
                   />
@@ -184,17 +185,6 @@ function TransferModal(props) {
                   )}
                 </div>
               )}
-              <div className="mt-3 mb-3">
-                <label htmlFor="transfer-input-password" className="form-label">
-                  <b>your</b> fizzgen account password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="transfer-input-password"
-                  required
-                />
-              </div>
               {internalTransfer && (
                 <div>
                   <p>

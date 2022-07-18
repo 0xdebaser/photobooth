@@ -1,9 +1,13 @@
-async function getGalleryData(userEmail, galleryApi) {
+async function getGalleryData(userName, userEmail) {
+  const GET_GALLERY_API =
+    "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/get-gallery";
+
   const bodyObject = {
+    username: userName,
     email: userEmail,
   };
   try {
-    const response = await fetch(galleryApi, {
+    const response = await fetch(GET_GALLERY_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,8 +20,10 @@ async function getGalleryData(userEmail, galleryApi) {
       );
     } else {
       const data = await response.json();
-      console.log(data);
-      return data.data;
+      if (data) {
+        console.log(data);
+        return data.data;
+      } else console.log("No gallery data received.");
     }
   } catch (error) {
     console.error(error);

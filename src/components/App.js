@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./nav/Navbar";
 import WebcamSuite from "./camera/WebcamSuite";
 import LoginModal from "./modals/LoginModal";
@@ -15,14 +15,9 @@ Amplify.configure(awsExports);
 
 const dev = false;
 
-const GET_GALLERY_API = dev
-  ? "http://localhost:8080/api/getGallery"
-  : "https://kcf8flh882.execute-api.us-east-1.amazonaws.com/dev/api/getGallery";
-
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
   const [user, setUser] = useState(null);
-  const [loggedInUser, setLoggedInUser] = useState(null);
   // Steps are state variables used for the fizzgen creation modal
   const [step1, setStep1] = useState(null);
   const [step2, setStep2] = useState(null);
@@ -35,6 +30,7 @@ function App() {
   const [toTransfer, setToTransfer] = useState(null);
 
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
+
   useEffect(() => {
     Hub.listen("auth", async ({ payload: { event, data } }) => {
       try {
@@ -46,7 +42,7 @@ function App() {
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
             setGalleryData(
-              await getGalleryData(user.attributes.email, GET_GALLERY_API)
+              await getGalleryData(user.username, user.attributes.email)
             );
             break;
           case "signOut":
@@ -55,10 +51,10 @@ function App() {
           case "signIn_failure":
             console.log("Sign in failure", data);
             break;
+          default:
+            break;
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     });
 
     getUser().then(async (userData) => {
@@ -66,12 +62,10 @@ function App() {
         setUser(userData);
         if (user.attributes) {
           setGalleryData(
-            await getGalleryData(user.attributes.email, GET_GALLERY_API)
+            await getGalleryData(user.username, user.attributes.email)
           );
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     });
   }, []);
 
@@ -90,7 +84,6 @@ function App() {
         setGalleryData={setGalleryData}
         user={user}
         setUser={setUser}
-        getGalleryApi={GET_GALLERY_API}
       />
       <LoginModal />
       <FizzgenModal step1={step1} step2={step2} step3={step3} />
@@ -99,7 +92,6 @@ function App() {
         setToTransfer={setToTransfer}
         dev={dev}
         setGalleryData={setGalleryData}
-        getGalleryApi={GET_GALLERY_API}
         user={user}
       />
       {!gallery && (
@@ -111,7 +103,6 @@ function App() {
           step3={step3}
           setStep3={setStep3}
           setGallery={setGallery}
-          getGalleryApi={GET_GALLERY_API}
           dev={dev}
           setGalleryData={setGalleryData}
           user={user}

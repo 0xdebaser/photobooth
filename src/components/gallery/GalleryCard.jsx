@@ -41,7 +41,8 @@ function GalleryCard(props) {
                 )}
                 {props.owner !== "transferred out" &&
                   `Owned by: ${props.owner}`}
-                {props.owner === props.user.attributes.email && (
+                {(props.owner === props.user.attributes.email ||
+                  props.owner === props.user.username) && (
                   <div className="mt-2">
                     <button
                       type="button"
