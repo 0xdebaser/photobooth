@@ -1,6 +1,7 @@
 $primary: #fa7f08;
 $secondary: #22babb;
-
+$font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
+  BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 :root {
@@ -24,6 +25,7 @@ $secondary: #22babb;
 
 .fizzgen-card-title {
   font-family: var(--brand-font);
+  color: black !important;
 }
 
 .img-captured {

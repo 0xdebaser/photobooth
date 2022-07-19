@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function GalleryCard(props) {
   async function handler() {
@@ -20,71 +20,101 @@ function GalleryCard(props) {
             alt="fizzgen"
           />
         </div>
-        <div className="card-body">
-          <h5 className="card-title fizzgen-card-title">{`${props.title} No. ${props.tokenId}`}</h5>
-          <p className="card-text">{props.description}</p>
-        </div>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <div className="row">
-              <div className="col text-center">
-                Minted by: {props.minter}
-                <br />
-                {props.owner === "transferred out" && (
+        {/* Start Accordion Here */}
+        <div className="accordion">
+          <div className="accordion-item">
+            <h2 className="accordion-header">
+              <button
+                className="accordion-button fizzgen-card-title"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#collapse${props._id}`}
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                {`${props.title} No. ${props.tokenId}`}
+              </button>
+            </h2>
+            <div
+              id={`collapse${props._id}`}
+              class="accordion-collapse collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                <li className="list-group-item">
+                  <div className="row">
+                    <div classname="col text-center">
+                      <p className="card-text">{props.description}</p>
+                    </div>
+                  </div>
+                </li>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    <div className="row">
+                      <div className="col text-center">
+                        Minted by: {props.minter}
+                        <br />
+                        {props.owner === "transferred out" && (
+                          <a
+                            href={`https://mumbai.polygonscan.com/tx/${props.transferTxn}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Transferred out
+                          </a>
+                        )}
+                        {props.owner !== "transferred out" &&
+                          `Owned by: ${props.owner}`}
+                        {(props.owner === props.user.attributes.email ||
+                          props.owner === props.user.username) && (
+                          <div className="mt-2">
+                            <button
+                              type="button"
+                              className="btn btn-primary transfer-btn"
+                              data-bs-toggle="modal"
+                              data-bs-target="#transfer-modal"
+                              onClick={handler}
+                            >
+                              Transfer
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                  <div className="row">
+                    <div className="col text-center">
+                      <li className="list-group-item">
+                        Minted on:{" "}
+                        <a
+                          href={`https://mumbai.polygonscan.com/tx/${props.mintTxn}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {props.network}
+                        </a>
+                      </li>
+                    </div>
+                  </div>
+                </ul>
+                <div className="card-body">
                   <a
-                    href={`https://mumbai.polygonscan.com/tx/${props.transferTxn}`}
+                    href={`https://testnets.opensea.io/assets/mumbai/${props.contract}/${props.tokenId}`}
+                    className="card-link"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Transferred out
+                    View NFT on OpenSea
                   </a>
-                )}
-                {props.owner !== "transferred out" &&
-                  `Owned by: ${props.owner}`}
-                {(props.owner === props.user.attributes.email ||
-                  props.owner === props.user.username) && (
-                  <div className="mt-2">
-                    <button
-                      type="button"
-                      className="btn btn-primary transfer-btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#transfer-modal"
-                      onClick={handler}
-                    >
-                      Transfer
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </li>
-          <div className="row">
-            <div className="col text-center">
-              <li className="list-group-item">
-                Minted on:{" "}
-                <a
-                  href={`https://mumbai.polygonscan.com/tx/${props.mintTxn}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {props.network}
-                </a>
-              </li>
-            </div>
-          </div>
-        </ul>
-        <div className="card-body">
-          <a
-            href={`https://testnets.opensea.io/assets/mumbai/${props.contract}/${props.tokenId}`}
-            className="card-link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            View NFT on OpenSea
-          </a>
-          {/* <a href="#" className="card-link">
+                  {/* <a href="#" className="card-link">
             Another link
           </a> */}
+                </div>
+                {/* End Accordion Here */}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
