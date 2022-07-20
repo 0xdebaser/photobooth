@@ -5,6 +5,7 @@ import FilterSuite from "./FilterSuite";
 import * as bootstrap from "bootstrap";
 import { Pixelify } from "react-pixelify";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
+import { addDataApi, mintApi, storeApi } from "../../utils/apiEndpoints.mjs";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
@@ -44,6 +45,8 @@ function WebcamSuite(props) {
     setAppliedFilter(null);
   }
 
+  // TODO: refactor this out to a separate mdodule
+
   async function fizzgenMe() {
     // Resets state variables tracking fizzgen creation steps and dismisses fizzgen modal
     function resetAndDismiss() {
@@ -54,13 +57,6 @@ function WebcamSuite(props) {
       const modal = bootstrap.Modal.getInstance(modalEl);
       modal.hide();
     }
-    // Define API endpoints
-    const STORE_ENDPOINT =
-      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/store-nft-data";
-    const MINT_ENDPOINT =
-      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/mint";
-    const ADD_DATA_ENDPOINT =
-      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/add-data";
 
     try {
       //STEP 1: generate JSON data for NFT and send to generation server
@@ -77,7 +73,7 @@ function WebcamSuite(props) {
         image: filteredImg,
       };
       const body = await JSON.stringify(nftData);
-      const response = await fetch(STORE_ENDPOINT, {
+      const response = await fetch(storeApi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +100,7 @@ function WebcamSuite(props) {
           const mintData = {
             tokenUri: nftData.tokenURI,
           };
-          const response2 = await fetch(MINT_ENDPOINT, {
+          const response2 = await fetch(mintApi, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -136,7 +132,7 @@ function WebcamSuite(props) {
               nftData.minterEmail = props.user.attributes.email;
               delete nftData.image;
               //Send data to server
-              const response3 = await fetch(ADD_DATA_ENDPOINT, {
+              const response3 = await fetch(addDataApi, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

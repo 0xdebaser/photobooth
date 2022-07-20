@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as bootstrap from "bootstrap";
 import { ethers } from "ethers";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
+import { transferApi } from "../../utils/apiEndpoints.mjs";
 
 function TransferModal(props) {
   //don't forget to delete this VVV
@@ -26,9 +27,6 @@ function TransferModal(props) {
   }
 
   async function handleSubmit(event) {
-    const TRANSFER_API =
-      "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/transfer";
-
     try {
       setLoading(true);
       event.preventDefault();
@@ -45,7 +43,7 @@ function TransferModal(props) {
         idToTransfer: props.toTransfer._id,
         tokenId: internalTransfer ? null : props.toTransfer.tokenId,
       };
-      const response = await fetch(TRANSFER_API, {
+      const response = await fetch(transferApi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

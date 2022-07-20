@@ -36,14 +36,21 @@ function App() {
       try {
         switch (event) {
           case "signIn":
-            getUser().then((userData) => setUser(userData));
+            await getUser().then(async (userData) => {
+              setUser(userData);
+              if (userData.attributes) {
+                setGalleryData(
+                  await getGalleryData(
+                    userData.username,
+                    userData.attributes.email
+                  )
+                );
+              }
+            });
             //Dismiss the sign in modal
             const modalEl = document.getElementById("loginModal");
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
-            setGalleryData(
-              await getGalleryData(user.username, user.attributes.email)
-            );
             break;
           case "signOut":
             setUser(null);
@@ -60,9 +67,9 @@ function App() {
     getUser().then(async (userData) => {
       try {
         setUser(userData);
-        if (user.attributes) {
+        if (userData.attributes) {
           setGalleryData(
-            await getGalleryData(user.username, user.attributes.email)
+            await getGalleryData(userData.username, userData.attributes.email)
           );
         }
       } catch (error) {}

@@ -37,14 +37,14 @@ function GalleryCard(props) {
             </h2>
             <div
               id={`collapse${props._id}`}
-              class="accordion-collapse collapse"
+              className="accordion-collapse collapse"
               aria-labelledby="headingOne"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div className="accordion-body">
                 <li className="list-group-item">
                   <div className="row">
-                    <div classname="col text-center">
+                    <div className="col text-center">
                       <p className="card-text">{props.description}</p>
                     </div>
                   </div>

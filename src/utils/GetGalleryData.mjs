@@ -1,13 +1,12 @@
-async function getGalleryData(userName, userEmail) {
-  const GET_GALLERY_API =
-    "https://4wsfs93fra.execute-api.us-east-1.amazonaws.com/dev/get-gallery";
+import { getGalleryApi } from "./apiEndpoints.mjs";
 
+async function getGalleryData(userName, userEmail) {
   const bodyObject = {
     username: userName,
     email: userEmail,
   };
   try {
-    const response = await fetch(GET_GALLERY_API, {
+    const response = await fetch(getGalleryApi, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +20,6 @@ async function getGalleryData(userName, userEmail) {
     } else {
       const data = await response.json();
       if (data) {
-        console.log(data);
         return data.data;
       } else console.log("No gallery data received.");
     }

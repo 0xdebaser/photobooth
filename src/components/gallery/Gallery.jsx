@@ -11,6 +11,7 @@ function Gallery(props) {
   return (
     <div id="gallery-main-div" className="row mt-2 ps-2 pe-2">
       {props.galleryData &&
+        props.galleryData.length !== 0 &&
         reversedGalleryData.map((fizz, index) => {
           return (
             <GalleryCard
@@ -31,7 +32,7 @@ function Gallery(props) {
             />
           );
         })}
-      {!props.galleryData && (
+      {(!props.galleryData || props.galleryData.length === 0) && (
         <div className="row mt-3">
           <div className="col text-center">
             <h1>Your gallery is empty. ¯\_(ツ)_/¯ Go make some fizzgens!</h1>
