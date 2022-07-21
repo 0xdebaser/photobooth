@@ -6,6 +6,7 @@ import FizzgenModal from "./modals/FizzgenModal";
 import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./gallery/Gallery";
 import TransferModal from "./modals/TransferModal";
+import GetCreditsModal from "./modals/GetCreditsModal";
 import * as bootstrap from "bootstrap";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
@@ -18,6 +19,7 @@ const dev = false;
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
   const [user, setUser] = useState(null);
+  const [userCredits, setUserCredits] = useState(null);
   // Steps are state variables used for the fizzgen creation modal
   const [step1, setStep1] = useState(null);
   const [step2, setStep2] = useState(null);
@@ -80,7 +82,7 @@ function App() {
   function getUser() {
     return Auth.currentAuthenticatedUser()
       .then((userData) => userData)
-      .catch(() => console.log("Not signed in"));
+      .catch(() => {});
   }
 
   return (
@@ -89,6 +91,7 @@ function App() {
         setGallery={setGallery}
         gallery={gallery}
         setGalleryData={setGalleryData}
+        galleryData={galleryData}
         user={user}
         setUser={setUser}
       />
@@ -100,6 +103,10 @@ function App() {
         dev={dev}
         setGalleryData={setGalleryData}
         user={user}
+      />
+      <GetCreditsModal
+        userCredits={userCredits}
+        setUserCredits={setUserCredits}
       />
       {!gallery && (
         <WebcamSuite

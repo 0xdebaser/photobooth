@@ -61,8 +61,6 @@ function TransferModal(props) {
           alert(`${data.message} Please try again.`);
           resetEverything();
         } else {
-          console.log(response);
-
           // Display success message, update gallery data, and dismiss modal after slight delay
           setLoading("finished");
           props.setGalleryData(
