@@ -1,11 +1,19 @@
 import React from "react";
 
 function GalleryCard(props) {
-  async function handler() {
+  async function transferHandler() {
     props.setToTransfer({
       _id: props._id,
       tokenId: props.tokenId,
       contract: props.contract,
+    });
+  }
+
+  async function mintMoreHandler() {
+    props.setToMintMore({
+      tokenId: props.tokenId,
+      tokenUri: props.tokenUri,
+      _id: props._id,
     });
   }
 
@@ -74,9 +82,23 @@ function GalleryCard(props) {
                               className="btn btn-primary transfer-btn"
                               data-bs-toggle="modal"
                               data-bs-target="#transfer-modal"
-                              onClick={handler}
+                              onClick={transferHandler}
                             >
                               Transfer
+                            </button>
+                          </div>
+                        )}
+                        {(props.owner === props.user.attributes.email ||
+                          props.owner === props.user.username) && (
+                          <div className="mt-2">
+                            <button
+                              type="button"
+                              className="btn btn-primary transfer-btn"
+                              data-bs-toggle="modal"
+                              data-bs-target="#mint-more-modal"
+                              onClick={mintMoreHandler}
+                            >
+                              Mint Again
                             </button>
                           </div>
                         )}

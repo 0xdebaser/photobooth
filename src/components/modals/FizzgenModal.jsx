@@ -26,8 +26,8 @@ function FizzgenModal(props) {
             <p>
               ⚠ closing this modal can result in your fizzgen failing to be
               created. creation can take several minutes depending on blockchain
-              traffic. your fizzgen will appear in your gallery once the process
-              is complete.
+              traffic. your new fizzgen will appear in your gallery once the
+              process is complete.
             </p>
             <ul>
               <li>

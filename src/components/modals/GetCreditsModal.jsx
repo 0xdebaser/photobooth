@@ -1,69 +1,74 @@
 import React, { useState } from "react";
 import * as bootstrap from "bootstrap";
 import { PolygonLogo, EthLogo, AvaxLogo } from "../../images/tokenSvgs.mjs";
+import { getCreditsApi } from "../../utils/apiEndpoints.mjs";
 
 function GetCreditsModal(props) {
-  //don't forget to delete this VVV
   const [loading, setLoading] = useState(false);
   // This has to be a single level object or it will break (uses shallow copy)
-  const [requestedTransfers, setRequestedTransfers] = useState({});
+  const [requestedCredits, setRequestedCredits] = useState(null);
 
-  async function handleSubmit(event) {}
-  //     try {
-  //       setLoading(true);
-  //       event.preventDefault();
-  //       const transferData = {
-  //         email: props.user.attributes.email,
-  //         transferType: internalTransfer ? "internal" : "external",
-  //         recipient: internalTransfer
-  //           ? document.getElementById("internal-transfer-recipient").value
-  //           : null,
-  //         recipientCryptoAddress: internalTransfer
-  //           ? null
-  //           : document.getElementById("receive-crypto-address").value,
-  //         contractAddress: internalTransfer ? null : props.toTransfer.contract,
-  //         idToTransfer: props.toTransfer._id,
-  //         tokenId: internalTransfer ? null : props.toTransfer.tokenId,
-  //       };
-  //       const response = await fetch(transferApi, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(transferData),
-  //       });
-  //       if (response.status !== 200) {
-  //         alert(
-  //           `There has been a server error (${response.status}). Please try again.`
-  //         );
-  //         resetEverything();
-  //       } else {
-  //         const data = await response.json();
-  //         if (data.result !== "success") {
-  //           alert(`${data.message} Please try again.`);
-  //           resetEverything();
-  //         } else {
-  //           // Display success message, update gallery data, and dismiss modal after slight delay
-  //           setLoading("finished");
-  //           props.setGalleryData(
-  //             await getGalleryData(
-  //               props.user.username,
-  //               props.user.attributes.email
-  //             )
-  //           );
-  //           setTimeout(() => {
-  //             const modalEl = document.getElementById("transfer-modal");
-  //             const modal = bootstrap.Modal.getInstance(modalEl);
-  //             resetEverything();
-  //             modal.hide();
-  //           }, 2 * 1000);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       resetEverything();
-  //     }
-  //   }
+  function resetEverything() {
+    setLoading(false);
+    setRequestedCredits(null);
+    document.getElementById("polygon-credit-input").value = "0";
+    document.getElementById("avax-credit-input").value = "0";
+    document.getElementById("eth-credit-input").value = "0";
+  }
+
+  async function handleSubmit(event) {
+    try {
+      setLoading(true);
+      event.preventDefault();
+      const requestData = {
+        username: props.user.username,
+        currentAccount: props.userCredits ? props.userCredits : null,
+        requestedCredits: requestedCredits,
+      };
+      const response = await fetch(getCreditsApi, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+      if (response.status !== 200) {
+        alert(
+          `There has been a server error (${response.status}). Please try again.`
+        );
+        resetEverything();
+      } else {
+        console.log(response);
+        const data = await response.json();
+        if (data.result !== "success") {
+          alert(`${data.message} Please try again.`);
+          resetEverything();
+        } else {
+          // Display success message, update credit data, and dismiss modal after slight delay
+          setLoading("finished");
+          console.log(data);
+          const newCreditsObject = {
+            polygon: data.data.polygon_credits,
+            mumbai: data.data.polygon_mumbai_credits,
+            eth: data.data.eth_credits,
+            goerli: data.data.eth_goerli_credits,
+            avax: data.data.avax_credits,
+            fuji: data.data.avax_fuji_credits,
+          };
+          props.setUserCredits(newCreditsObject);
+          setTimeout(() => {
+            const modalEl = document.getElementById("get-credits-modal");
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            resetEverything();
+            modal.hide();
+          }, 2 * 1000);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      resetEverything();
+    }
+  }
 
   return (
     <div
@@ -99,9 +104,9 @@ function GetCreditsModal(props) {
                   id="polygon-credit-input"
                   defaultValue={0}
                   onChange={(event) => {
-                    const objCopy = Object.assign({}, requestedTransfers);
+                    const objCopy = Object.assign({}, requestedCredits);
                     objCopy.mumbai = event.target.value;
-                    setRequestedTransfers(objCopy);
+                    setRequestedCredits(objCopy);
                   }}
                 />
                 <label
@@ -126,9 +131,9 @@ function GetCreditsModal(props) {
                   id="avax-credit-input"
                   defaultValue={0}
                   onChange={(event) => {
-                    const objCopy = Object.assign({}, requestedTransfers);
+                    const objCopy = Object.assign({}, requestedCredits);
                     objCopy.fuji = event.target.value;
-                    setRequestedTransfers(objCopy);
+                    setRequestedCredits(objCopy);
                   }}
                 />
                 <label className="form-check-label" htmlFor="eth-credit-input">
@@ -150,9 +155,9 @@ function GetCreditsModal(props) {
                   id="eth-credit-input"
                   defaultValue={0}
                   onChange={(event) => {
-                    const objCopy = Object.assign({}, requestedTransfers);
+                    const objCopy = Object.assign({}, requestedCredits);
                     objCopy.goerli = event.target.value;
-                    setRequestedTransfers(objCopy);
+                    setRequestedCredits(objCopy);
                   }}
                 />
                 <label className="form-check-label" htmlFor="eth-credit-input">
@@ -179,7 +184,7 @@ function GetCreditsModal(props) {
               )}
               {loading === "finished" && (
                 <div>
-                  <p id="result-text">Fizzgen successfully transfered!</p>
+                  <p id="result-text">Credits added to account!</p>
                 </div>
               )}
             </form>

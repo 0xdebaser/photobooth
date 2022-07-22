@@ -10279,6 +10279,10 @@ textarea.form-control-lg {
   color: white;
 }
 
+.btn-white-text {
+  color: white;
+}
+
 .center-block {
   display: block;
   margin-left: auto;

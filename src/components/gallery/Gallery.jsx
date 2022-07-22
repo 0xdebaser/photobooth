@@ -16,6 +16,7 @@ function Gallery(props) {
           return (
             <GalleryCard
               key={index}
+              tokenUri={fizz.tokenURI}
               imgSrc={fizz.imgS3Url}
               title={fizz.name}
               tokenId={fizz.tokenId}
@@ -28,6 +29,7 @@ function Gallery(props) {
               _id={fizz._id}
               user={props.user}
               setToTransfer={props.setToTransfer}
+              setToMintMore={props.setToMintMore}
               transferTxn={fizz.transferTxnHash ? fizz.transferTxnHash : null}
             />
           );

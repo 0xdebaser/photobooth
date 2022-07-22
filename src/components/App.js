@@ -7,10 +7,12 @@ import getGalleryData from "../utils/GetGalleryData.mjs";
 import Gallery from "./gallery/Gallery";
 import TransferModal from "./modals/TransferModal";
 import GetCreditsModal from "./modals/GetCreditsModal";
+import MintMoreModal from "./modals/MintMoreModal";
 import * as bootstrap from "bootstrap";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
+import getCreditsData from "../utils/GetCreditsData.mjs";
 
 Amplify.configure(awsExports);
 
@@ -19,7 +21,7 @@ const dev = false;
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
   const [user, setUser] = useState(null);
-  const [userCredits, setUserCredits] = useState(null);
+  const [userCredits, setUserCredits] = useState({});
   // Steps are state variables used for the fizzgen creation modal
   const [step1, setStep1] = useState(null);
   const [step2, setStep2] = useState(null);
@@ -30,6 +32,8 @@ function App() {
   const [galleryData, setGalleryData] = useState(null);
   //State variable that holds data on fizzgen to be transferred
   const [toTransfer, setToTransfer] = useState(null);
+  //State variable that holds data on fizzgen to mint additional copies of
+  const [toMintMore, setToMintMore] = useState(null);
 
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
 
@@ -40,6 +44,10 @@ function App() {
           case "signIn":
             await getUser().then(async (userData) => {
               setUser(userData);
+              //Dismiss the sign in modal
+              const modalEl = document.getElementById("loginModal");
+              const modal = bootstrap.Modal.getInstance(modalEl);
+              modal.hide();
               if (userData.attributes) {
                 setGalleryData(
                   await getGalleryData(
@@ -47,12 +55,9 @@ function App() {
                     userData.attributes.email
                   )
                 );
+                setUserCredits(await getCreditsData(userData.username));
               }
             });
-            //Dismiss the sign in modal
-            const modalEl = document.getElementById("loginModal");
-            const modal = bootstrap.Modal.getInstance(modalEl);
-            modal.hide();
             break;
           case "signOut":
             setUser(null);
@@ -73,6 +78,7 @@ function App() {
           setGalleryData(
             await getGalleryData(userData.username, userData.attributes.email)
           );
+          setUserCredits(await getCreditsData(userData.username));
         }
       } catch (error) {}
     });
@@ -94,6 +100,7 @@ function App() {
         galleryData={galleryData}
         user={user}
         setUser={setUser}
+        userCredits={userCredits}
       />
       <LoginModal />
       <FizzgenModal step1={step1} step2={step2} step3={step3} />
@@ -107,6 +114,16 @@ function App() {
       <GetCreditsModal
         userCredits={userCredits}
         setUserCredits={setUserCredits}
+        user={user}
+      />
+      <MintMoreModal
+        toMintMore={toMintMore}
+        userCredits={userCredits}
+        setStep1={setStep1}
+        setStep2={setStep2}
+        setStep3={setStep3}
+        galleryData={galleryData}
+        user={user}
       />
       {!gallery && (
         <WebcamSuite
@@ -127,6 +144,7 @@ function App() {
           galleryData={galleryData}
           user={user}
           setToTransfer={setToTransfer}
+          setToMintMore={setToMintMore}
         />
       )}
     </div>

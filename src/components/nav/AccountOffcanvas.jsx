@@ -53,25 +53,61 @@ function AccountOffcanvas(props) {
               </b>
             </li>
             <li className="nav-item my-2 account-data">
-              <EthLogo
-                width="36"
-                className="me-2"
-                text="testnet (goerli) mint credits:"
-              />
+              <div className="d-flex flex-row">
+                <div>
+                  <EthLogo
+                    width="36"
+                    className="me-2"
+                    text="testnet (goerli) mint credits:"
+                  />
+                </div>
+                <div className="ms-2 mt-3">
+                  <b>
+                    {props.userCredits.hasOwnProperty("goerli") &&
+                    props.userCredits.goerli
+                      ? props.userCredits.goerli
+                      : "0"}
+                  </b>
+                </div>
+              </div>
             </li>
             <li className="nav-item my-2 account-data">
-              <AvaxLogo
-                className="me-2"
-                width="36"
-                text="testnet (fuji) mint credits:"
-              />
+              <div className="d-flex flex-row">
+                <div>
+                  <AvaxLogo
+                    className="me-2"
+                    width="36"
+                    text="testnet (fuji) mint credits:"
+                  />
+                </div>
+                <div className="ms-2 mt-1">
+                  <b>
+                    {props.userCredits.hasOwnProperty("fuji") &&
+                    props.userCredits.fuji
+                      ? props.userCredits.fuji
+                      : "0"}
+                  </b>
+                </div>
+              </div>
             </li>
             <li className="nav-item my-3 account-data">
-              <PolygonLogo
-                width="36"
-                className="me-2"
-                text="testnet (mumbai) mint credits: "
-              />
+              <div className="d-flex flex-row">
+                <div>
+                  <PolygonLogo
+                    width="36"
+                    className="me-2"
+                    text="testnet (mumbai) mint credits: "
+                  />
+                </div>
+                <div className="ms-2 mt-1">
+                  <b>
+                    {props.userCredits.hasOwnProperty("mumbai") &&
+                    props.userCredits.mumbai
+                      ? props.userCredits.mumbai
+                      : "0"}
+                  </b>
+                </div>
+              </div>
             </li>
           </ul>
           <div className="text-center">

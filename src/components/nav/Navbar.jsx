@@ -73,6 +73,7 @@ function Navbar(props) {
             <AccountOffcanvas
               user={props.user}
               galleryData={props.galleryData}
+              userCredits={props.userCredits}
             />
           )}
         </div>
