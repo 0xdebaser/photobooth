@@ -20,7 +20,7 @@ function Footer() {
               </a>
             </li>
             <li className="ms-3">
-              <a className="text-muted" href="https://fizzgen.me">
+              <a className="text-muted" href="https://fizzgen.com">
                 <i className="bi bi-emoji-kiss footer-icons"></i>
               </a>
             </li>
