@@ -16,7 +16,7 @@ function LoginModal() {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="loginModalLabel">
-              fizzgen is more fun when you're logged in
+              fizzgen is more fun when you're logged in.
             </h5>
             <button
               type="button"
@@ -25,7 +25,7 @@ function LoginModal() {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="d-flex justify-content-center py-2">
             <div>
               <Authenticator
                 formFields={formFields}

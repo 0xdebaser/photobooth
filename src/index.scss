@@ -1,6 +1,6 @@
 $primary: #fa7f08;
 $secondary: #22babb;
-$font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
+$font-family-sans-serif: hedley-new-web, -apple-system, system-ui,
   BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
 @import "../node_modules/bootstrap/scss/bootstrap";
 
@@ -10,7 +10,26 @@ $font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
   --color-three: #9ef8ee;
   --color-four: #fa7f08;
   --color-five: #f24405;
-  --brand-font: "Dela Gothic One", cursive;
+  --brand-font: "Dela Gothic One", hedley-new-web, -apple-system, system-ui,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  // background: rgb(255, 255, 255);
+  // background: linear-gradient(
+  //   180deg,
+  //   rgba(255, 255, 255, 1) 33%,
+  //   rgba(158, 248, 238, 1) 66%,
+  //   rgba(250, 127, 8, 1) 100%
+  // );
+}
+
+footer {
+  background: var(--color-one);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 3.5rem;
 }
 
 .btn-cam {
@@ -27,9 +46,20 @@ $font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
   margin-right: auto;
 }
 
+.emoji {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.25rem;
+}
+
 .fizzgen-card-title {
   font-family: var(--brand-font);
   color: black !important;
+}
+
+.footer-icons {
+  color: white;
+  font-size: 1.25em;
 }
 
 .img-captured {
@@ -40,6 +70,16 @@ $font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
 
 .nav-main {
   background-color: var(--color-four);
+}
+
+.offcanvas {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 15%,
+    rgba(158, 248, 238, 1) 66%,
+    rgba(250, 127, 8, 1) 100%
+  );
 }
 
 .text-brand {
@@ -61,6 +101,10 @@ $font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
 
 #card-body-top {
   background-color: var(--color-three);
+}
+
+#content-wrap {
+  padding-bottom: 4.5rem;
 }
 
 #filter-dropdown {
@@ -86,6 +130,11 @@ $font-family-sans-serif: forma-djr-text, -apple-system, system-ui,
 
 #nav-display-name {
   font-size: 1.5rem;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
 }
 
 #result-text {

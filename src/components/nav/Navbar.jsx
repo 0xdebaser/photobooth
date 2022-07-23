@@ -8,11 +8,16 @@ function Navbar(props) {
     <div>
       <nav className="navbar nav-main">
         <div className="container-fluid">
-          <div className="navbar-brand text-brand-white" id="nav-display-name">
-            {props.user
-              ? `fizzgen x ${props.user.attributes["custom:artistName"]}`
-              : "fizzgen"}
-          </div>
+          <a href="https://www.fizzgen.com" className="text-decoration-none">
+            <div
+              className="navbar-brand text-brand-white"
+              id="nav-display-name"
+            >
+              {props.user
+                ? `fizzgen x ${props.user.attributes["custom:artistName"]}`
+                : "fizzgen"}
+            </div>
+          </a>
           <form className="d-flex justify-content-end">
             {/* Conditionally render navbar buttons */}
             {!props.user && (
