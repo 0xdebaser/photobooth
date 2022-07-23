@@ -1,17 +1,20 @@
 import React from "react";
 import NavbarButton from "./NavbarButton";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
+import AccountOffcanvas from "./AccountOffcanvas";
 
 function Navbar(props) {
   return (
     <div>
-      <nav className="navbar navbar-expand-sm" id="nav-main">
+      <nav className="navbar nav-main">
         <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1 fs-2 text-brand">
-            fizzgen{" "}
-            {props.user && `x ${props.user.attributes["custom:artistName"]}`}
-          </span>
-          <ul className="navbar-nav">
+          <div className="navbar-brand text-brand-white" id="nav-display-name">
+            {props.user
+              ? `fizzgen x ${props.user.attributes["custom:artistName"]}`
+              : "fizzgen"}
+          </div>
+          <form className="d-flex justify-content-end">
+            {/* Conditionally render navbar buttons */}
             {!props.user && (
               <NavbarButton
                 label="login or register"
@@ -53,7 +56,26 @@ function Navbar(props) {
                 modal={null}
               />
             )}
-          </ul>
+            {props.user && (
+              <button
+                id="account-toggle-btn"
+                type="button"
+                className="btn btn-link text-decoration-none"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar"
+              >
+                <i className="bi bi-person-circle" id="nav-account-icon"></i>
+              </button>
+            )}
+          </form>
+          {props.user && (
+            <AccountOffcanvas
+              user={props.user}
+              galleryData={props.galleryData}
+              userCredits={props.userCredits}
+            />
+          )}
         </div>
       </nav>
     </div>

@@ -6,6 +6,7 @@ import * as bootstrap from "bootstrap";
 import { Pixelify } from "react-pixelify";
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 import { addDataApi, mintApi, storeApi } from "../../utils/apiEndpoints.mjs";
+import { resetAndDismiss } from "../../utils/fizzgen_creation/Helpers.mjs";
 
 function WebcamSuite(props) {
   const webcamRef = React.useRef(null);
@@ -48,16 +49,6 @@ function WebcamSuite(props) {
   // TODO: refactor this out to a separate mdodule
 
   async function fizzgenMe() {
-    // Resets state variables tracking fizzgen creation steps and dismisses fizzgen modal
-    function resetAndDismiss() {
-      props.setStep1(null);
-      props.setStep2(null);
-      props.setStep3(null);
-      const modalEl = document.getElementById("fizzgen-modal");
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal.hide();
-    }
-
     try {
       //STEP 1: generate JSON data for NFT and send to generation server
       props.setStep1("started");
@@ -84,12 +75,12 @@ function WebcamSuite(props) {
         alert(
           `There has been a server error (${response.status}). Please try again.`
         );
-        resetAndDismiss();
+        resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
       } else {
         const data = await response.json();
         if (data.result !== "success") {
           alert(`${data.message} Please try again.`);
-          resetAndDismiss();
+          resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
         } else {
           props.setStep1("finished");
           nftData.tokenURI = data.ipfsUrl;
@@ -99,6 +90,7 @@ function WebcamSuite(props) {
           props.setStep2("started");
           const mintData = {
             tokenUri: nftData.tokenURI,
+            chain: "mumbai",
           };
           const response2 = await fetch(mintApi, {
             method: "POST",
@@ -111,12 +103,12 @@ function WebcamSuite(props) {
             alert(
               `There has been a server error (${response2.status}). Please try again.`
             );
-            resetAndDismiss();
+            resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
           } else {
             const data2 = await response2.json();
             if (data2.result !== "success") {
               alert(`${data2.message}. Please try again.`);
-              resetAndDismiss();
+              resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
             } else {
               props.setStep2("finished");
               // STEP 3: Add data to fizzgen mondodb
@@ -143,12 +135,16 @@ function WebcamSuite(props) {
                 alert(
                   `There has been a server error (${response3.status}). Please try again.`
                 );
-                resetAndDismiss();
+                resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
               } else {
                 const data3 = await response3.json();
                 if (data3.result !== "success") {
                   alert(`${data3.message}. Please try again.`);
-                  resetAndDismiss();
+                  resetAndDismiss(
+                    props.setStep1,
+                    props.setStep2,
+                    props.setStep3
+                  );
                 } else {
                   props.setStep3("finished");
                   props.setGalleryData(
@@ -159,7 +155,11 @@ function WebcamSuite(props) {
                   );
                   setTimeout(() => {
                     props.setGallery(true);
-                    resetAndDismiss();
+                    resetAndDismiss(
+                      props.setStep1,
+                      props.setStep2,
+                      props.setStep3
+                    );
                   }, 2 * 1000);
                 }
               }
@@ -169,7 +169,7 @@ function WebcamSuite(props) {
       }
     } catch (error) {
       console.error(error.message);
-      resetAndDismiss();
+      resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
     }
   }
 

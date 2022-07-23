@@ -4,18 +4,20 @@ import GalleryCard from "./GalleryCard";
 function Gallery(props) {
   let reversedGalleryData;
 
-  if (props.galleryData) {
+  if (Array.isArray(props.galleryData)) {
     reversedGalleryData = props.galleryData.slice().reverse();
   }
 
   return (
-    <div id="gallery-main-div" className="row mt-2 ps-2 pe-2">
+    <div id="gallery-main-div" className="row mt-2 ps-4">
       {props.galleryData &&
+        Array.isArray(props.galleryData) &&
         props.galleryData.length !== 0 &&
         reversedGalleryData.map((fizz, index) => {
           return (
             <GalleryCard
               key={index}
+              tokenUri={fizz.tokenURI}
               imgSrc={fizz.imgS3Url}
               title={fizz.name}
               tokenId={fizz.tokenId}
@@ -28,11 +30,14 @@ function Gallery(props) {
               _id={fizz._id}
               user={props.user}
               setToTransfer={props.setToTransfer}
+              setToMintMore={props.setToMintMore}
               transferTxn={fizz.transferTxnHash ? fizz.transferTxnHash : null}
             />
           );
         })}
-      {(!props.galleryData || props.galleryData.length === 0) && (
+      {(!props.galleryData ||
+        !Array.isArray(props.galleryData) ||
+        props.galleryData.length === 0) && (
         <div className="row mt-3">
           <div className="col text-center">
             <h1>Your gallery is empty. ¯\_(ツ)_/¯ Go make some fizzgens!</h1>

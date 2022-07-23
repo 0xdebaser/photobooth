@@ -42,6 +42,7 @@ function TransferModal(props) {
         contractAddress: internalTransfer ? null : props.toTransfer.contract,
         idToTransfer: props.toTransfer._id,
         tokenId: internalTransfer ? null : props.toTransfer.tokenId,
+        chain: props.toTransfer.chain,
       };
       const response = await fetch(transferApi, {
         method: "POST",
@@ -61,8 +62,6 @@ function TransferModal(props) {
           alert(`${data.message} Please try again.`);
           resetEverything();
         } else {
-          console.log(response);
-
           // Display success message, update gallery data, and dismiss modal after slight delay
           setLoading("finished");
           props.setGalleryData(

@@ -10279,6 +10279,10 @@ textarea.form-control-lg {
   color: white;
 }
 
+.btn-white-text {
+  color: white;
+}
+
 .center-block {
   display: block;
   margin-left: auto;
@@ -10296,13 +10300,24 @@ textarea.form-control-lg {
   text-align: center;
 }
 
+.nav-main {
+  background-color: var(--color-four);
+}
+
 .text-brand {
-  color: white;
   font-family: var(--brand-font);
-  font-size: 2em !important;
+}
+
+.text-brand-white {
+  font-family: var(--brand-font);
+  color: white;
 }
 
 .transfer-btn {
+  color: white;
+}
+
+#account-toggle-btn {
   color: white;
 }
 
@@ -10323,14 +10338,16 @@ textarea.form-control-lg {
   font-family: var(--brand-font);
 }
 
-#nav-display-name {
-  color: white;
-  font-weight: bold;
-  font-size: 1.5em;
+#gallery-main-div {
+  width: 99%;
 }
 
-#nav-main {
-  background-color: var(--color-four);
+#nav-account-icon {
+  font-size: 2em;
+}
+
+#nav-display-name {
+  font-size: 1.5rem;
 }
 
 #result-text {
