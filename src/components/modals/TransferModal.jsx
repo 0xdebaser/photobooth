@@ -182,24 +182,29 @@ function TransferModal(props) {
                   )}
                 </div>
               )}
-              {internalTransfer && (
-                <div>
-                  <p>
-                    ⚠ If you transfer this fizzgen to another user, you will
-                    lose control of it. Make sure that you <b>really</b> want to
-                    do this. ⚠
-                  </p>
-                </div>
-              )}
-              {!internalTransfer && (
-                <div>
-                  <p>
-                    ⚠ This NFT transfer is <b>irreversable</b>. If you send it
-                    to an incorrect or invalid address, the NFT will be lost
-                    forever. Make sure that you <b>really</b> want to do this. ⚠
-                  </p>
-                </div>
-              )}
+              <div className="mt-3">
+                {internalTransfer && (
+                  <div>
+                    <p>
+                      <span className="emoji">⚠</span> If you transfer this
+                      fizzgen to another user, you will lose control of it. Make
+                      sure that you <b>really</b> want to do this.{" "}
+                      <span className="emoji">⚠</span>
+                    </p>
+                  </div>
+                )}
+                {!internalTransfer && (
+                  <div>
+                    <p>
+                      <span className="emoji">⚠</span> This NFT transfer is{" "}
+                      <b>irreversable</b>. If you send it to an incorrect or
+                      invalid address, the NFT will be lost forever. Make sure
+                      that you <b>really</b> want to do this.
+                      <span className="emoji">⚠</span>
+                    </p>
+                  </div>
+                )}
+              </div>
               {!loading && (
                 <button type="submit" className="btn btn-primary">
                   Submit

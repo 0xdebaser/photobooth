@@ -13,6 +13,7 @@ import { Amplify, Auth, Hub } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
 import getCreditsData from "../utils/GetCreditsData.mjs";
+import Footer from "./Footer";
 
 Amplify.configure(awsExports);
 
@@ -92,64 +93,67 @@ function App() {
   }
 
   return (
-    <div>
-      <Navbar
-        setGallery={setGallery}
-        gallery={gallery}
-        setGalleryData={setGalleryData}
-        galleryData={galleryData}
-        user={user}
-        setUser={setUser}
-        userCredits={userCredits}
-      />
-      <LoginModal />
-      <FizzgenModal step1={step1} step2={step2} step3={step3} />
-      <TransferModal
-        toTransfer={toTransfer}
-        setToTransfer={setToTransfer}
-        dev={dev}
-        setGalleryData={setGalleryData}
-        user={user}
-      />
-      <GetCreditsModal
-        userCredits={userCredits}
-        setUserCredits={setUserCredits}
-        user={user}
-      />
-      <MintMoreModal
-        toMintMore={toMintMore}
-        userCredits={userCredits}
-        setStep1={setStep1}
-        setStep2={setStep2}
-        setStep3={setStep3}
-        galleryData={galleryData}
-        user={user}
-        setGalleryData={setGalleryData}
-        setGallery={setGallery}
-        setUserCredits={setUserCredits}
-      />
-      {!gallery && (
-        <WebcamSuite
-          step1={step1}
-          setStep1={setStep1}
-          step2={step2}
-          setStep2={setStep2}
-          step3={step3}
-          setStep3={setStep3}
+    <div id="page-container">
+      <div id="content-wrap">
+        <Navbar
           setGallery={setGallery}
+          gallery={gallery}
+          setGalleryData={setGalleryData}
+          galleryData={galleryData}
+          user={user}
+          setUser={setUser}
+          userCredits={userCredits}
+        />
+        <LoginModal />
+        <FizzgenModal step1={step1} step2={step2} step3={step3} />
+        <TransferModal
+          toTransfer={toTransfer}
+          setToTransfer={setToTransfer}
           dev={dev}
           setGalleryData={setGalleryData}
           user={user}
         />
-      )}
-      {gallery && (
-        <Gallery
+        <GetCreditsModal
+          userCredits={userCredits}
+          setUserCredits={setUserCredits}
+          user={user}
+        />
+        <MintMoreModal
+          toMintMore={toMintMore}
+          userCredits={userCredits}
+          setStep1={setStep1}
+          setStep2={setStep2}
+          setStep3={setStep3}
           galleryData={galleryData}
           user={user}
-          setToTransfer={setToTransfer}
-          setToMintMore={setToMintMore}
+          setGalleryData={setGalleryData}
+          setGallery={setGallery}
+          setUserCredits={setUserCredits}
         />
-      )}
+        {!gallery && (
+          <WebcamSuite
+            step1={step1}
+            setStep1={setStep1}
+            step2={step2}
+            setStep2={setStep2}
+            step3={step3}
+            setStep3={setStep3}
+            setGallery={setGallery}
+            dev={dev}
+            setGalleryData={setGalleryData}
+            user={user}
+          />
+        )}
+        {gallery && (
+          <Gallery
+            galleryData={galleryData}
+            user={user}
+            setToTransfer={setToTransfer}
+            setToMintMore={setToMintMore}
+          />
+        )}
+      </div>
+      <Footer />
     </div>
   );
 }

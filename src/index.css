@@ -48,7 +48,7 @@
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 33, 37, 41;
   --bs-body-bg-rgb: 255, 255, 255;
-  --bs-font-sans-serif: forma-djr-text, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --bs-font-sans-serif: hedley-new-web, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -10272,7 +10272,16 @@ textarea.form-control-lg {
   --color-three: #9ef8ee;
   --color-four: #fa7f08;
   --color-five: #f24405;
-  --brand-font: "Dela Gothic One", cursive;
+  --brand-font: "Dela Gothic One", hedley-new-web, -apple-system, system-ui,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+footer {
+  background: var(--color-one);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 3.5rem;
 }
 
 .btn-cam {
@@ -10289,9 +10298,19 @@ textarea.form-control-lg {
   margin-right: auto;
 }
 
+.emoji {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.25rem;
+}
+
 .fizzgen-card-title {
   font-family: var(--brand-font);
   color: black !important;
+}
+
+.footer-icons {
+  color: white;
+  font-size: 1.25em;
 }
 
 .img-captured {
@@ -10302,6 +10321,11 @@ textarea.form-control-lg {
 
 .nav-main {
   background-color: var(--color-four);
+}
+
+.offcanvas {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, rgb(255, 255, 255) 15%, rgb(158, 248, 238) 66%, rgb(250, 127, 8) 100%);
 }
 
 .text-brand {
@@ -10323,6 +10347,10 @@ textarea.form-control-lg {
 
 #card-body-top {
   background-color: var(--color-three);
+}
+
+#content-wrap {
+  padding-bottom: 4.5rem;
 }
 
 #filter-dropdown {
@@ -10348,6 +10376,11 @@ textarea.form-control-lg {
 
 #nav-display-name {
   font-size: 1.5rem;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
 }
 
 #result-text {
