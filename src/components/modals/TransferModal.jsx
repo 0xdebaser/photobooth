@@ -42,6 +42,7 @@ function TransferModal(props) {
         contractAddress: internalTransfer ? null : props.toTransfer.contract,
         idToTransfer: props.toTransfer._id,
         tokenId: internalTransfer ? null : props.toTransfer.tokenId,
+        chain: props.toTransfer.chain,
       };
       const response = await fetch(transferApi, {
         method: "POST",

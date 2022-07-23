@@ -124,6 +124,9 @@ function App() {
         setStep3={setStep3}
         galleryData={galleryData}
         user={user}
+        setGalleryData={setGalleryData}
+        setGallery={setGallery}
+        setUserCredits={setUserCredits}
       />
       {!gallery && (
         <WebcamSuite

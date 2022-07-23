@@ -38,7 +38,6 @@ function GetCreditsModal(props) {
         );
         resetEverything();
       } else {
-        console.log(response);
         const data = await response.json();
         if (data.result !== "success") {
           alert(`${data.message} Please try again.`);

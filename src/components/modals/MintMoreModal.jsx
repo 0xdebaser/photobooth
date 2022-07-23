@@ -1,26 +1,14 @@
 import React, { useState } from "react";
-import * as bootstrap from "bootstrap";
+//import * as bootstrap from "bootstrap";
 import { PolygonLogo, EthLogo, AvaxLogo } from "../../images/tokenSvgs.mjs";
-import { getCreditsApi } from "../../utils/apiEndpoints.mjs";
+//import { getCreditsApi } from "../../utils/apiEndpoints.mjs";
 import duplicateFizzgen from "../../utils/fizzgen_creation/DuplicateFizzgen.mjs";
 
 function MintMoreModal(props) {
   const [targetChain, setTargetChain] = useState(null);
 
-  //Helper function to determine wheter user has zero transfer credits
-  function isEmpty(obj) {
-    const empty = Object.values(obj).every((value) => {
-      if (value === null || value === "0") {
-        return true;
-      }
-      return false;
-    });
-    return empty;
-  }
-
   //Helper fuction to locate gallery object with particular id
   function getGalleryObject(id) {
-    console.log(id);
     for (let i = 0; i < props.galleryData.length; i++) {
       if (props.galleryData[i]["_id"] === id) {
         return props.galleryData[i];
@@ -32,7 +20,6 @@ function MintMoreModal(props) {
   // Passes fizzgen duplication data over to controller function
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(targetChain);
     const originalData = getGalleryObject(props.toMintMore._id);
     if (!originalData) {
       console.alert("Problem duplicating fizzgen. Please try again.");
@@ -41,10 +28,14 @@ function MintMoreModal(props) {
     duplicateFizzgen(
       originalData,
       targetChain,
-      props.user.username,
+      props.user,
       props.setStep1,
       props.setStep2,
-      props.setStep3
+      props.setStep3,
+      props.setGalleryData,
+      props.setGallery,
+      props.userCredits,
+      props.setUserCredits
     );
   }
 
@@ -92,7 +83,7 @@ function MintMoreModal(props) {
                         props.userCredits.mumbai
                           ? props.userCredits.mumbai
                           : "0"
-                      } testnet credits remaining)`}
+                      } testnet credit(s) remaining)`}
                     />
                   </div>
                 </label>
@@ -115,7 +106,7 @@ function MintMoreModal(props) {
                       width="36"
                       text={`(${
                         props.userCredits.fuji ? props.userCredits.fuji : "0"
-                      } testnet credits remaining)`}
+                      } testnet credit(s) remaining)`}
                     />
                   </div>
                 </label>
@@ -140,7 +131,7 @@ function MintMoreModal(props) {
                         props.userCredits.goerli
                           ? props.userCredits.goerli
                           : "0"
-                      } testnet credits remaining)`}
+                      } testnet credit(s) remaining)`}
                     />
                   </div>
                 </label>
@@ -153,6 +144,8 @@ function MintMoreModal(props) {
                   <button
                     type="submit"
                     className="btn btn-primary btn-white-text my-3 px-3 text-brand"
+                    data-bs-toggle="modal"
+                    data-bs-target="#fizzgen-modal"
                   >
                     Mint new fizzgen!
                   </button>

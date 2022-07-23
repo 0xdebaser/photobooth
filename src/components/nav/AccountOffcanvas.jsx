@@ -22,7 +22,7 @@ function AccountOffcanvas(props) {
           ></button>
         </div>
         <hr />
-        <div className="offcanvas-body">
+        <div className="offcanvas-body text-center">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item my-2 account-data">
               <span className="text-brand me-1">fizzgens</span> minted:{" "}
