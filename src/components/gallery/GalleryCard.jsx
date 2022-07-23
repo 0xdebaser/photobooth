@@ -109,16 +109,15 @@ function GalleryCard(props) {
                       <div className="col text-center">
                         Minted by: {props.minter}
                         <br />
-                        {props.owner === "transferred out" &&
-                          chain === "mumbai" && (
-                            <a
-                              href={txnUrl + props.transferTxn}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Transferred out
-                            </a>
-                          )}
+                        {props.owner === "transferred out" && (
+                          <a
+                            href={txnUrl + props.transferTxn}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Transferred out
+                          </a>
+                        )}
                         {props.owner !== "transferred out" &&
                           `Owned by: ${props.owner}`}
                         {(props.owner === props.user.attributes.email ||

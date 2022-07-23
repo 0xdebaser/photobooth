@@ -27,9 +27,27 @@ function TransferModal(props) {
   }
 
   async function handleSubmit(event) {
+    event.preventDefault();
+    let chain;
     try {
+      switch (props.toTransfer.network) {
+        case "Polygon Mumbai":
+          chain = "mumbai";
+          break;
+
+        case "Ethereum Goerli":
+          chain = "goerli";
+          break;
+
+        case "Avalanche Fuji":
+          chain = "fuji";
+          break;
+
+        default:
+          console.log(props.toTransfer.network);
+          throw new Error("No chain specified for transfer!");
+      }
       setLoading(true);
-      event.preventDefault();
       const transferData = {
         email: props.user.attributes.email,
         transferType: internalTransfer ? "internal" : "external",
@@ -42,7 +60,7 @@ function TransferModal(props) {
         contractAddress: internalTransfer ? null : props.toTransfer.contract,
         idToTransfer: props.toTransfer._id,
         tokenId: internalTransfer ? null : props.toTransfer.tokenId,
-        chain: props.toTransfer.chain,
+        chain: chain,
       };
       const response = await fetch(transferApi, {
         method: "POST",
