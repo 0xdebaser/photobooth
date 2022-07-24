@@ -20,7 +20,6 @@ async function getGalleryData(userName, userEmail) {
     } else {
       const data = await response.json();
       if (data) {
-        // console.log(data);
         return data.data;
       } else console.log("No gallery data received.");
     }

@@ -35,6 +35,10 @@ function App() {
   const [toTransfer, setToTransfer] = useState(null);
   //State variable that holds data on fizzgen to mint additional copies of
   const [toMintMore, setToMintMore] = useState(null);
+  //State variables for sorting gallery
+  const [sortMostRecent, setSortMostRecent] = useState(true);
+  const [showOwned, setShowOwned] = useState(true);
+  const [showMinted, setShowMinted] = useState(true);
 
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
 
@@ -147,9 +151,16 @@ function App() {
         {gallery && (
           <Gallery
             galleryData={galleryData}
+            setGalleryData={setGalleryData}
             user={user}
             setToTransfer={setToTransfer}
             setToMintMore={setToMintMore}
+            sortMostRecent={sortMostRecent}
+            setSortMostRecent={setSortMostRecent}
+            showOwned={showOwned}
+            setShowOwned={setShowOwned}
+            showMinted={showMinted}
+            setShowMinted={setShowMinted}
           />
         )}
       </div>
