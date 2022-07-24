@@ -167,12 +167,19 @@ function GalleryCard(props) {
                   </div>
                 </ul>
                 <div className="card-body">
-                  {(chain === "eth" ||
-                    chain === "goerli" ||
-                    chain === "mumbai" ||
-                    chain === "polygon") && (
+                  {(chain === "mumbai" || chain === "polygon") && (
                     <a
                       href={`https://testnets.opensea.io/assets/mumbai/${props.contract}/${props.tokenId}`}
+                      className="card-link"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View NFT on OpenSea
+                    </a>
+                  )}
+                  {(chain === "eth" || chain === "goerli") && (
+                    <a
+                      href={`https://testnets.opensea.io/assets/goerli/${props.contract}/${props.tokenId}`}
                       className="card-link"
                       target="_blank"
                       rel="noreferrer"
