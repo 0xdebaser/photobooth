@@ -90,12 +90,12 @@ function GetCreditsModal(props) {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body d-flex">
             <form onSubmit={handleSubmit}>
               {/* Polgyon input */}
-              <div>
+              <div className="d-flex flex-row align-items-center mt-2 mb-4">
                 <input
-                  className="my-2 me-2"
+                  className="ps-2 me-2"
                   type="number"
                   min="0"
                   max="9"
@@ -108,21 +108,14 @@ function GetCreditsModal(props) {
                     setRequestedCredits(objCopy);
                   }}
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor="polygon-credit-input"
-                >
-                  <PolygonLogo
-                    className="me-2"
-                    width="36"
-                    text="testnet (mumbai) credits ($0.00 each)"
-                  />
-                </label>
+                <PolygonLogo className="me-2" width="36" />
+                <div>testnet (mumbai) credits ($0.00 each)</div>
               </div>
+
               {/* Avax Input */}
-              <div>
+              <div className="d-flex flex-row align-items-center my-4">
                 <input
-                  className="my-2 me-2"
+                  className="ps-2 me-2"
                   type="number"
                   min="0"
                   max="9"
@@ -135,18 +128,13 @@ function GetCreditsModal(props) {
                     setRequestedCredits(objCopy);
                   }}
                 />
-                <label className="form-check-label" htmlFor="eth-credit-input">
-                  <AvaxLogo
-                    className="me-2"
-                    width="36"
-                    text="testnet (fuji) credits ($0.00 each)"
-                  />
-                </label>
+                <AvaxLogo className="me-2" width="36" />
+                <div>testnet (fuji) credits ($0.00 each)</div>
               </div>
               {/* Eth Input */}
-              <div>
+              <div className="d-flex flex-row align-items-center my-4">
                 <input
-                  className="my-2 me-2"
+                  className="ps-2 me-2"
                   type="number"
                   min="0"
                   max="9"
@@ -159,13 +147,8 @@ function GetCreditsModal(props) {
                     setRequestedCredits(objCopy);
                   }}
                 />
-                <label className="form-check-label" htmlFor="eth-credit-input">
-                  <EthLogo
-                    className="me-2"
-                    width="36"
-                    text="testnet (goerli) credits ($0.00 each)"
-                  />
-                </label>
+                <EthLogo className="me-2" width="36" />
+                <div>testnet (goerli) credits ($0.00 each)</div>
               </div>
               <p className="my-3 fs-3">
                 Total cost: <b>$0.00</b>

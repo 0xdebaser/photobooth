@@ -18,12 +18,14 @@ function WebcamSuite(props) {
   const [filteredImg, setFilteredImg] = useState(null);
   // State variable that affects level of pixelation when 8bit filter is applied
   const [pixLevel, setPixLevel] = useState(12);
+  // State variable that allows for flipping of camera on cell phones
+  const [cameraFacing, setCameraFacing] = useState("user");
 
   // Options/config of webcam
   const videoConstraints = {
     width: 360,
     height: 360,
-    facingMode: "user",
+    facingMode: cameraFacing,
   };
 
   // Captures webcam image
@@ -216,9 +218,24 @@ function WebcamSuite(props) {
       </div>
 
       {/* Capture button appears until image is captured, then becomes reset button */}
-      <div className="row mt-2">
+      <div className="d-flex flex-row align-items-center justify-content-center mt-2">
         {!imgSrc && (
           <CamButton label="capture" handler={capture} primary={true} />
+        )}
+        {!imgSrc && window.screen.width <= 1024 && (
+          <div>
+            <button
+              className="btn btn-cam btn-secondary ms-2"
+              onClick={() => {
+                cameraFacing === "user"
+                  ? setCameraFacing({ exact: "environment" })
+                  : setCameraFacing("user");
+              }}
+            >
+              <i className="bi bi-arrow-repeat"></i>
+              <i className="bi bi-camera ms-2"></i>
+            </button>
+          </div>
         )}
         {imgSrc && <CamButton label="reset" handler={reset} />}
       </div>

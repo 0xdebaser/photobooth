@@ -2,7 +2,7 @@ import React from "react";
 
 function CamButton(props) {
   return (
-    <div className="col text-center">
+    <div className="text-center">
       {props.primary && (
         <button
           className="btn btn-cam btn-secondary"
