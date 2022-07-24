@@ -40,7 +40,7 @@ function Gallery(props) {
     <div>
       {props.galleryData && (
         <div
-          className="d-flex justify-content-between mt-2 mx-1"
+          className="d-flex justify-content-between mt-2 mx-2"
           id="gallery-controls"
         >
           <div className="d-flex align-items-center">
@@ -55,7 +55,13 @@ function Gallery(props) {
               />
               <span className="slider round"></span>
             </label>
-            <div className="ms-1">latest first</div>
+            <div className="ms-1">
+              {props.sortMostRecent ? (
+                <i className="bi bi-hourglass-top"></i>
+              ) : (
+                <i className="bi bi-hourglass-bottom"></i>
+              )}
+            </div>
           </div>
           <div className="d-flex align-items-center">
             <label className="switch">
@@ -66,7 +72,10 @@ function Gallery(props) {
               />
               <span className="slider round"></span>
             </label>
-            <div className="ms-1">show owned</div>
+            <div className="ms-1">
+              {!props.showOwned && <i className="bi bi-slash-circle me-1"></i>}
+              owned
+            </div>
           </div>
           <div className="d-flex align-items-center">
             <label className="switch">
@@ -77,7 +86,10 @@ function Gallery(props) {
               />
               <span className="slider round"></span>
             </label>
-            <div className="ms-1">show minted</div>
+            <div className="ms-1">
+              {!props.showMinted && <i className="bi bi-slash-circle me-1"></i>}
+              minted
+            </div>
           </div>
         </div>
       )}
