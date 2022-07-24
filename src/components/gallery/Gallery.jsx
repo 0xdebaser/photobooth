@@ -50,7 +50,6 @@ function Gallery(props) {
                 checked={props.sortMostRecent}
                 onChange={() => {
                   props.setSortMostRecent(!props.sortMostRecent);
-                  console.log(props.sortMostRecent);
                 }}
               />
               <span className="slider round"></span>

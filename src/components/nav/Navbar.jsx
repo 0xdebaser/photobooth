@@ -6,7 +6,7 @@ import AccountOffcanvas from "./AccountOffcanvas";
 function Navbar(props) {
   return (
     <div>
-      <nav className="nav-main">
+      <nav className="nav-main py-2 px-2">
         <div className="d-flex flex-wrap align-items-center">
           <div className="me-auto ms-2">
             <a href="https://www.fizzgen.com" className="text-decoration-none">
