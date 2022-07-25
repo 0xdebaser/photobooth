@@ -10,6 +10,11 @@ function Footer() {
           </div>
           <ul className="nav col-md-4 pe-3 justify-content-end list-unstyled d-flex">
             <li className="ms-3">
+              <a href="https://fizzgen.com/how-to.html">
+                <i className="bi bi-question-circle footer-icons"></i>
+              </a>
+            </li>
+            <li className="ms-3">
               <a href="https://twitter.com/fizzgen_me">
                 <i className="bi bi-twitter footer-icons"></i>
               </a>
