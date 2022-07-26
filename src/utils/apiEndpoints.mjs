@@ -1,4 +1,4 @@
-const dev = true;
+const dev = false;
 
 export const addDataApi = dev
   ? "https://bhlpjvqu5i.execute-api.us-east-1.amazonaws.com/dev/add-data"
