@@ -103,27 +103,30 @@ function GalleryCard(props) {
                     <div className="col text-center">
                       <p className="card-text">{props.description}</p>
                     </div>
-                    {/* <div className="row">
-                      <div className="col text-center">
-                        <a
-                          className="btn btn-secondary btn-white-text"
-                          href={`https://twitter.com/intent/tweet?text=fizzgen%20no.%20${
-                            props.tokenId
-                          }%0a%0acc:%20@fizzgen_me%0a%0a${
-                            urlString.slice(0, -4) + "html"
-                          }`}
-                          data-size="large"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <i className="bi bi-twitter"></i>
-                          <span> fizzgen</span>
-                        </a>
+                    {(props.owner === props.user.attributes.email ||
+                      props.owner === props.user.username) && (
+                      <div className="row text-center">
+                        <div className="col text-center">
+                          <a
+                            className="btn btn-secondary btn-white-text my-2 ms-3"
+                            href={`https://twitter.com/intent/tweet?text=fizzgen%20no.%20${
+                              props.tokenId
+                            }%0a%0acc:%20@fizzgen_me%0a%0a${
+                              urlString.slice(0, -4) + "html"
+                            }`}
+                            data-size="large"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <i className="bi bi-twitter"></i>
+                            <span className="text-brand"> fizzgen</span>
+                          </a>
+                        </div>
                       </div>
-                    </div> */}
+                    )}
                   </div>
                 </li>
-                <ul className="list-group list-group-flush">
+                <ul className="list-group">
                   <li className="list-group-item">
                     <div className="row">
                       <div className="col text-center">
