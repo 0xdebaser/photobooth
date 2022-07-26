@@ -50,6 +50,8 @@ function GalleryCard(props) {
       break;
   }
 
+  const urlString = new String(props.imgSrc);
+
   return (
     <div className="col-sm-6 col-md-4 col-xl-3 mt-2 text-center">
       <div className="card border-secondary">
@@ -101,6 +103,24 @@ function GalleryCard(props) {
                     <div className="col text-center">
                       <p className="card-text">{props.description}</p>
                     </div>
+                    {/* <div className="row">
+                      <div className="col text-center">
+                        <a
+                          className="btn btn-secondary btn-white-text"
+                          href={`https://twitter.com/intent/tweet?text=fizzgen%20no.%20${
+                            props.tokenId
+                          }%0a%0acc:%20@fizzgen_me%0a%0a${
+                            urlString.slice(0, -4) + "html"
+                          }`}
+                          data-size="large"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <i className="bi bi-twitter"></i>
+                          <span> fizzgen</span>
+                        </a>
+                      </div>
+                    </div> */}
                   </div>
                 </li>
                 <ul className="list-group list-group-flush">

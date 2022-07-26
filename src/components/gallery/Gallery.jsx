@@ -29,7 +29,7 @@ function Gallery(props) {
         obj.owner === props.user.attributes.email
     );
   } else {
-    displayData = props.galleryData.slice();
+    if (props.galleryData) displayData = props.galleryData.slice();
   }
 
   if (props.sortMostRecent) {
