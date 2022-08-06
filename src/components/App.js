@@ -131,12 +131,12 @@ function App() {
                   }}
                 ></button>
               </div>
-              <p>
+              <p className="text-center">
                 Welcome to fizzgen! For demo day only, visitors are
                 automatically signed into the "sandbox" account to make features
                 accessible without the need to register for a new account.
               </p>
-              <p>
+              <p className="text-center">
                 If you would like to use your own account, all you need to do is
                 click the sign out button on the nav bar and log back in with
                 your own account (or create a new one).

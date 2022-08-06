@@ -224,7 +224,10 @@ function TransferModal(props) {
                 )}
               </div>
               {!loading && (
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-white-text"
+                >
                   Submit
                 </button>
               )}
