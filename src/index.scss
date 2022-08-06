@@ -68,6 +68,14 @@ footer {
   text-align: center;
 }
 
+.modal {
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  overflow-y: initial !important;
+}
+
 .nav-main {
   background-color: var(--color-four);
 }

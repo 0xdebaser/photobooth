@@ -61,6 +61,9 @@ function Navbar(props) {
                   onClick={() => {
                     props.user.signOut();
                     props.setUser(null);
+                    if (props.demo) {
+                      window.localStorage.setItem("signedOut", "true");
+                    }
                     window.location.reload();
                     return false;
                   }}
