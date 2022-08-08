@@ -19,7 +19,7 @@ import DemoDayModal from "./modals/DemoDayModal";
 Amplify.configure(awsExports);
 
 const dev = false;
-const demo = true;
+const demo = false;
 
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
