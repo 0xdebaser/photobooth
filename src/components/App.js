@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import MainMenu from "./MainMenu";
 import Navbar from "./nav/Navbar";
 import WebcamSuite from "./camera/WebcamSuite";
 import LoginModal from "./modals/LoginModal";
@@ -14,12 +15,11 @@ import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
 import getCreditsData from "../utils/GetCreditsData.mjs";
 import Footer from "./Footer";
-import DemoDayModal from "./modals/DemoDayModal";
+import ImageUpload from "./image_upload/ImageUpload";
 
 Amplify.configure(awsExports);
 
 const dev = false;
-const demo = false;
 
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
@@ -29,6 +29,12 @@ function App() {
   const [step1, setStep1] = useState(null);
   const [step2, setStep2] = useState(null);
   const [step3, setStep3] = useState(null);
+  // State variable to indicate whether the main menu is active
+  const [mainMenu, setMainMenu] = useState(true);
+  // State variable to indicate whether the camera is active
+  const [camera, setCamera] = useState(false);
+  // State variable to indicate whether the upload module is active
+  const [upload, setUpload] = useState(false);
   // State variable to indicate whether the gallery is active
   const [gallery, setGallery] = useState(null);
   // State variable that holds data on all of a logged in user's fizzgens
@@ -41,7 +47,6 @@ function App() {
   const [sortMostRecent, setSortMostRecent] = useState(true);
   const [showOwned, setShowOwned] = useState(true);
   const [showMinted, setShowMinted] = useState(true);
-  const [showDemoDayMessage, setShowDemoDayMessage] = useState(true);
 
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
 
@@ -63,6 +68,10 @@ function App() {
                     userData.attributes.email
                   )
                 );
+                if (mainMenu) {
+                  setMainMenu(false);
+                  setGallery(true);
+                }
                 setUserCredits(await getCreditsData(userData.username));
               }
             });
@@ -86,6 +95,10 @@ function App() {
           setGalleryData(
             await getGalleryData(userData.username, userData.attributes.email)
           );
+          if (mainMenu) {
+            setMainMenu(false);
+            setGallery(true);
+          }
           setUserCredits(await getCreditsData(userData.username));
         }
       } catch (error) {}
@@ -110,53 +123,21 @@ function App() {
           user={user}
           setUser={setUser}
           userCredits={userCredits}
-          demo={demo}
+          camera={camera}
+          setCamera={setCamera}
+          mainMenu={mainMenu}
+          setMainMenu={setMainMenu}
+          upload={upload}
+          setUpload={setUpload}
         />
-        {demo && (
-          <DemoDayModal
-            user={user}
-            setShowDemoDayMessage={setShowDemoDayMessage}
+        {mainMenu && (
+          <MainMenu
+            setMainMenu={setMainMenu}
+            setCamera={setCamera}
+            setGallery={setGallery}
+            setUpload={setUpload}
           />
         )}
-        {demo &&
-          showDemoDayMessage &&
-          !window.localStorage.getItem("signedOut") && (
-            <div className="border border-secondary mx-3 my-3 px-3 py-3">
-              <div className="text-end">
-                <button
-                  type="button"
-                  className="btn-close border border-secondary"
-                  onClick={() => {
-                    setShowDemoDayMessage(false);
-                  }}
-                ></button>
-              </div>
-              <p className="text-center">
-                Welcome to fizzgen! For demo day only, visitors are
-                automatically signed into the "sandbox" account to make features
-                accessible without the need to register for a new account.
-              </p>
-              <p className="text-center">
-                If you would like to use your own account, all you need to do is
-                click the sign out button on the nav bar and log back in with
-                your own account (or create a new one).
-              </p>
-              <div className="text-center">
-                <p className="lead">Have fun! 😃</p>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-white-text"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                  onClick={() => {
-                    setShowDemoDayMessage(false);
-                  }}
-                >
-                  Dismiss and LFG!
-                </button>
-              </div>
-            </div>
-          )}
         <LoginModal />
         <FizzgenModal step1={step1} step2={step2} step3={step3} />
         <TransferModal
@@ -183,7 +164,8 @@ function App() {
           setGallery={setGallery}
           setUserCredits={setUserCredits}
         />
-        {!gallery && (
+        {upload && <ImageUpload />}
+        {camera && (
           <WebcamSuite
             step1={step1}
             setStep1={setStep1}
