@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { PolygonLogo, EthLogo, AvaxLogo } from "../../images/tokenSvgs.mjs";
+import "./accountOffcanvas.styles.scss";
 
 function AccountOffcanvas(props) {
+  let navigate = useNavigate();
+
   if (props.user) {
     return (
       <div
@@ -21,6 +26,18 @@ function AccountOffcanvas(props) {
             aria-label="Close"
           ></button>
         </div>
+        <button
+          className="btn btn-secondary transfer-btn ms-3 my-1 sign-out-btn"
+          onClick={() => {
+            props.user.signOut();
+            props.setUser(null);
+            navigate("/");
+            window.location.reload();
+            return false;
+          }}
+        >
+          sign out
+        </button>
         <hr />
         <div className="offcanvas-body">
           <ul className="navbar-nav d-flex">

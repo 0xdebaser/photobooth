@@ -1,52 +1,35 @@
-import React, { useState, useEffect, useMemo } from "react";
-import MainMenu from "./MainMenu";
-import Navbar from "./nav/Navbar";
-import WebcamSuite from "./camera/WebcamSuite";
-import LoginModal from "./modals/LoginModal";
-import FizzgenModal from "./modals/FizzgenModal";
+import React, { useState, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Page from "../routes/page/page.component";
+import Index from "../routes/index/index.component";
+import Upload from "../routes/upload/upload.component";
+import Camera from "../routes/camera/camera.component";
+import Gallery from "../routes/gallery/gallery.component";
 import getGalleryData from "../utils/GetGalleryData.mjs";
-import Gallery from "./gallery/Gallery";
-import TransferModal from "./modals/TransferModal";
-import GetCreditsModal from "./modals/GetCreditsModal";
-import MintMoreModal from "./modals/MintMoreModal";
+
 import * as bootstrap from "bootstrap";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import awsExports from "../aws-exports";
 import getCreditsData from "../utils/GetCreditsData.mjs";
-import Footer from "./Footer";
-import ImageUpload from "./image_upload/ImageUpload";
 
 Amplify.configure(awsExports);
 
+// Used to switch over to dev server API
 const dev = false;
 
 function App() {
   // State variable used to hold logged in user info and detect whether there's a logged in user
   const [user, setUser] = useState(null);
+  // State variable that holds credits info for logged in user
   const [userCredits, setUserCredits] = useState({});
   // Steps are state variables used for the fizzgen creation modal
   const [step1, setStep1] = useState(null);
   const [step2, setStep2] = useState(null);
   const [step3, setStep3] = useState(null);
-  // State variable to indicate whether the main menu is active
-  const [mainMenu, setMainMenu] = useState(true);
-  // State variable to indicate whether the camera is active
-  const [camera, setCamera] = useState(false);
-  // State variable to indicate whether the upload module is active
-  const [upload, setUpload] = useState(false);
-  // State variable to indicate whether the gallery is active
-  const [gallery, setGallery] = useState(null);
   // State variable that holds data on all of a logged in user's fizzgens
   const [galleryData, setGalleryData] = useState(null);
-  //State variable that holds data on fizzgen to be transferred
-  const [toTransfer, setToTransfer] = useState(null);
-  //State variable that holds data on fizzgen to mint additional copies of
-  const [toMintMore, setToMintMore] = useState(null);
-  //State variables for sorting gallery
-  const [sortMostRecent, setSortMostRecent] = useState(true);
-  const [showOwned, setShowOwned] = useState(true);
-  const [showMinted, setShowMinted] = useState(true);
 
   // From: https://www.sufle.io/blog/aws-amplify-authentication-part-2
 
@@ -68,10 +51,6 @@ function App() {
                     userData.attributes.email
                   )
                 );
-                if (mainMenu) {
-                  setMainMenu(false);
-                  setGallery(true);
-                }
                 setUserCredits(await getCreditsData(userData.username));
               }
             });
@@ -95,10 +74,6 @@ function App() {
           setGalleryData(
             await getGalleryData(userData.username, userData.attributes.email)
           );
-          if (mainMenu) {
-            setMainMenu(false);
-            setGallery(true);
-          }
           setUserCredits(await getCreditsData(userData.username));
         }
       } catch (error) {}
@@ -113,90 +88,59 @@ function App() {
   }
 
   return (
-    <div id="page-container">
-      <div id="content-wrap">
-        <Navbar
-          setGallery={setGallery}
-          gallery={gallery}
-          setGalleryData={setGalleryData}
-          galleryData={galleryData}
-          user={user}
-          setUser={setUser}
-          userCredits={userCredits}
-          camera={camera}
-          setCamera={setCamera}
-          mainMenu={mainMenu}
-          setMainMenu={setMainMenu}
-          upload={upload}
-          setUpload={setUpload}
-        />
-        {mainMenu && (
-          <MainMenu
-            setMainMenu={setMainMenu}
-            setCamera={setCamera}
-            setGallery={setGallery}
-            setUpload={setUpload}
-          />
-        )}
-        <LoginModal />
-        <FizzgenModal step1={step1} step2={step2} step3={step3} />
-        <TransferModal
-          toTransfer={toTransfer}
-          setToTransfer={setToTransfer}
-          dev={dev}
-          setGalleryData={setGalleryData}
-          user={user}
-        />
-        <GetCreditsModal
-          userCredits={userCredits}
-          setUserCredits={setUserCredits}
-          user={user}
-        />
-        <MintMoreModal
-          toMintMore={toMintMore}
-          userCredits={userCredits}
-          setStep1={setStep1}
-          setStep2={setStep2}
-          setStep3={setStep3}
-          galleryData={galleryData}
-          user={user}
-          setGalleryData={setGalleryData}
-          setGallery={setGallery}
-          setUserCredits={setUserCredits}
-        />
-        {upload && <ImageUpload />}
-        {camera && (
-          <WebcamSuite
-            step1={step1}
-            setStep1={setStep1}
-            step2={step2}
-            setStep2={setStep2}
-            step3={step3}
-            setStep3={setStep3}
-            setGallery={setGallery}
-            dev={dev}
-            setGalleryData={setGalleryData}
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Page
             user={user}
-          />
-        )}
-        {gallery && (
-          <Gallery
+            setUser={setUser}
             galleryData={galleryData}
             setGalleryData={setGalleryData}
-            user={user}
-            setToTransfer={setToTransfer}
-            setToMintMore={setToMintMore}
-            sortMostRecent={sortMostRecent}
-            setSortMostRecent={setSortMostRecent}
-            showOwned={showOwned}
-            setShowOwned={setShowOwned}
-            showMinted={showMinted}
-            setShowMinted={setShowMinted}
+            userCredits={userCredits}
+            setUserCredits={setUserCredits}
+            step1={step1}
+            step2={step2}
+            step3={step3}
           />
-        )}
-      </div>
-      <Footer />
-    </div>
+        }
+      >
+        <Route index element={<Index />} />
+        <Route path="upload" element={<Upload />} />
+        <Route
+          path="camera"
+          element={
+            <Camera
+              step1={step1}
+              setStep1={setStep1}
+              step2={step2}
+              setStep2={setStep2}
+              step3={step3}
+              setStep3={setStep3}
+              dev={dev}
+              setGalleryData={setGalleryData}
+              user={user}
+            />
+          }
+        />
+        <Route
+          path="gallery"
+          element={
+            <Gallery
+              galleryData={galleryData}
+              setGalleryData={setGalleryData}
+              user={user}
+              userCredits={userCredits}
+              setUserCredits={setUserCredits}
+              setStep1={setStep1}
+              setStep2={setStep2}
+              setStep3={setStep3}
+              dev={dev}
+            />
+          }
+        />
+      </Route>
+    </Routes>
   );
 }
 

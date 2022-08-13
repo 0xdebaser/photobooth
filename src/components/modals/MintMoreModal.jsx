@@ -33,7 +33,6 @@ function MintMoreModal(props) {
       props.setStep2,
       props.setStep3,
       props.setGalleryData,
-      props.setGallery,
       props.userCredits,
       props.setUserCredits
     );

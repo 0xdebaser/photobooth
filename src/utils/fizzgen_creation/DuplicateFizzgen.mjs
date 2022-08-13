@@ -11,7 +11,6 @@ async function duplicateFizzgen(
   setStep2,
   setStep3,
   setGalleryData,
-  setGallery,
   userCredits,
   setUserCredits
 ) {
@@ -91,8 +90,9 @@ async function duplicateFizzgen(
     setGalleryData(await getGalleryData(user.username, user.attributes.email));
     setStep3("finished");
     setTimeout(() => {
-      setGallery(true);
       resetAndDismiss(setStep1, setStep2, setStep3);
+      // Need to come up with a more elegant (react) solution for this!
+      window.location.href = "https://fizzgen.me/gallery";
     }, 2 * 1000);
     // Deduct credits from user account
     const requestData = {

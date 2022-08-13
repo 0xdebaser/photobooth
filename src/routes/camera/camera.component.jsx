@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Webcam from "react-webcam";
-import CamButton from "./CamButton";
-import FilterSuite from "./FilterSuite";
-import * as bootstrap from "bootstrap";
+import CamButton from "../../components/camera/CamButton";
+import FilterSuite from "../../components/camera/FilterSuite";
 import { Pixelify } from "react-pixelify";
+import { useNavigate } from "react-router-dom";
+
 import getGalleryData from "../../utils/GetGalleryData.mjs";
 import { addDataApi, mintApi, storeApi } from "../../utils/apiEndpoints.mjs";
 import { resetAndDismiss } from "../../utils/fizzgen_creation/Helpers.mjs";
+import "./camera.styles.scss";
 
-function WebcamSuite(props) {
+function Camera(props) {
   const webcamRef = React.useRef(null);
   // State variable to hold captured (unfiltered) image
   const [imgSrc, setImgSrc] = useState(null);
@@ -20,6 +22,8 @@ function WebcamSuite(props) {
   const [pixLevel, setPixLevel] = useState(12);
   // State variable that allows for flipping of camera on cell phones
   const [cameraFacing, setCameraFacing] = useState("user");
+
+  let navigate = useNavigate();
 
   // Options/config of webcam
   const videoConstraints = {
@@ -156,12 +160,12 @@ function WebcamSuite(props) {
                     )
                   );
                   setTimeout(() => {
-                    props.setGallery(true);
                     resetAndDismiss(
                       props.setStep1,
                       props.setStep2,
                       props.setStep3
                     );
+                    navigate("/gallery");
                   }, 2 * 1000);
                 }
               }
@@ -279,4 +283,4 @@ function WebcamSuite(props) {
   );
 }
 
-export default WebcamSuite;
+export default Camera;
