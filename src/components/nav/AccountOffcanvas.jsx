@@ -28,11 +28,11 @@ function AccountOffcanvas(props) {
         </div>
         <button
           className="btn btn-secondary transfer-btn ms-3 my-1 sign-out-btn"
+          data-bs-dismiss="offcanvas"
           onClick={() => {
             props.user.signOut();
             props.setUser(null);
             navigate("/");
-            window.location.reload();
             return false;
           }}
         >

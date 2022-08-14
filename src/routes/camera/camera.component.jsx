@@ -5,9 +5,7 @@ import FilterSuite from "../../components/camera/FilterSuite";
 import { Pixelify } from "react-pixelify";
 import { useNavigate } from "react-router-dom";
 
-import getGalleryData from "../../utils/GetGalleryData.mjs";
-import { addDataApi, mintApi, storeApi } from "../../utils/apiEndpoints.mjs";
-import { resetAndDismiss } from "../../utils/fizzgen_creation/Helpers.mjs";
+import fizzgenMe from "../../utils/fizzgen_creation/FizzgenMe.mjs";
 import "./camera.styles.scss";
 
 function Camera(props) {
@@ -50,133 +48,6 @@ function Camera(props) {
     setImgSrc(null);
     setFilteredImg(null);
     setAppliedFilter(null);
-  }
-
-  // TODO: refactor this out to a separate mdodule
-
-  async function fizzgenMe() {
-    try {
-      //STEP 1: generate JSON data for NFT and send to generation server
-      props.setStep1("started");
-      props.setStep2(null);
-      props.setStep3(null);
-      const currentDate = new Date();
-      const currentUTC = currentDate.toUTCString();
-
-      const nftData = {
-        username: props.user.username,
-        name: "Fizzgen",
-        description: `Fizzgen originally created by ${props.user.attributes["custom:artistName"]} at ${currentUTC}.`,
-        image: filteredImg,
-      };
-      const body = await JSON.stringify(nftData);
-      const response = await fetch(storeApi, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: body,
-      });
-      if (response.status !== 200) {
-        alert(
-          `There has been a server error (${response.status}). Please try again.`
-        );
-        resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-      } else {
-        const data = await response.json();
-        if (data.result !== "success") {
-          alert(`${data.message} Please try again.`);
-          resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-        } else {
-          props.setStep1("finished");
-          nftData.tokenURI = data.ipfsUrl;
-          nftData.imgS3Url = data.s3URL;
-
-          //STEP 2: mint NFT
-          props.setStep2("started");
-          const mintData = {
-            tokenUri: nftData.tokenURI,
-            chain: "mumbai",
-          };
-          const response2 = await fetch(mintApi, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(mintData),
-          });
-          if (response2.status !== 200) {
-            alert(
-              `There has been a server error (${response2.status}). Please try again.`
-            );
-            resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-          } else {
-            const data2 = await response2.json();
-            if (data2.result !== "success") {
-              alert(`${data2.message}. Please try again.`);
-              resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-            } else {
-              props.setStep2("finished");
-              // STEP 3: Add data to fizzgen mondodb
-              props.setStep3("started");
-              //Set data for adding to fizzgen mondodb
-              nftData.contract = data2.contract;
-              nftData.network = data2.network;
-              nftData.tokenId = data2.tokenID;
-              nftData.mintTxn = data2.txnHash;
-              nftData.originalCreationDate = currentUTC;
-              nftData.minter = props.user.username;
-              nftData.owner = props.user.username;
-              nftData.minterEmail = props.user.attributes.email;
-              delete nftData.image;
-              //Send data to server
-              const response3 = await fetch(addDataApi, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(nftData),
-              });
-              if (response3.status !== 200) {
-                alert(
-                  `There has been a server error (${response3.status}). Please try again.`
-                );
-                resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-              } else {
-                const data3 = await response3.json();
-                if (data3.result !== "success") {
-                  alert(`${data3.message}. Please try again.`);
-                  resetAndDismiss(
-                    props.setStep1,
-                    props.setStep2,
-                    props.setStep3
-                  );
-                } else {
-                  props.setStep3("finished");
-                  props.setGalleryData(
-                    await getGalleryData(
-                      props.user.username,
-                      props.user.attributes.email
-                    )
-                  );
-                  setTimeout(() => {
-                    resetAndDismiss(
-                      props.setStep1,
-                      props.setStep2,
-                      props.setStep3
-                    );
-                    navigate("/gallery");
-                  }, 2 * 1000);
-                }
-              }
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error(error.message);
-      resetAndDismiss(props.setStep1, props.setStep2, props.setStep3);
-    }
   }
 
   return (
@@ -265,7 +136,17 @@ function Camera(props) {
           <CamButton
             label="fizzgen me!"
             primary={true}
-            handler={fizzgenMe}
+            handler={async () => {
+              await fizzgenMe(
+                props.user,
+                filteredImg,
+                props.setStep1,
+                props.setStep2,
+                props.setStep3,
+                props.setGalleryData
+              );
+              navigate("/gallery");
+            }}
             modal="modal"
             target="#fizzgen-modal"
           />

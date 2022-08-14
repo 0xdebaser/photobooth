@@ -106,7 +106,18 @@ function App() {
         }
       >
         <Route index element={<Index />} />
-        <Route path="upload" element={<Upload />} />
+        <Route
+          path="upload"
+          element={
+            <Upload
+              user={user}
+              setStep1={setStep1}
+              setStep2={setStep2}
+              setStep3={setStep3}
+              setGalleryData={setGalleryData}
+            />
+          }
+        />
         <Route
           path="camera"
           element={
