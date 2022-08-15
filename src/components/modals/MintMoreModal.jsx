@@ -135,6 +135,28 @@ function MintMoreModal(props) {
                   </div>
                 </label>
               </div>
+              <div className="form-check my-4">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="chainSelection"
+                  id="mint-eth-radio"
+                  value="eth"
+                  onChange={() => setTargetChain("eth")}
+                />
+                <label className="form-check-label" htmlFor="mint-eth-radio">
+                  <div className="d-flex">
+                    mint to
+                    <EthLogo
+                      className="ms-2 me-2"
+                      width="24"
+                      text={`(${
+                        props.userCredits.eth ? props.userCredits.eth : "0"
+                      } mainnet credit(s) remaining)`}
+                    />
+                  </div>
+                </label>
+              </div>
               <div>
                 {/* Submit button will not display if user lacks credits for the selected chain.
                     In that case, get credits button will display. */}

@@ -81,6 +81,18 @@ function AccountOffcanvas(props) {
                 </b>
               </div>
             </li>
+            <li className="nav-item mt-3 mb-1 account-data d-flex flex-row align-items-center justify-content-center">
+              <EthLogo width="36" className="me-2" />
+              <div>
+                mainnet mint credits:{" "}
+                <b>
+                  {props.userCredits.hasOwnProperty("eth") &&
+                  props.userCredits.eth
+                    ? props.userCredits.eth
+                    : "0"}
+                </b>
+              </div>
+            </li>
             <li className="nav-item my-3 account-data d-flex flex-row align-items-center justify-content-center">
               <AvaxLogo className="me-2" width="36" />
               <div>

@@ -42,8 +42,9 @@ function GalleryCard(props) {
       chain = "goerli";
       txnUrl = "https://goerli.etherscan.io/tx/";
       break;
-    case "Ethereum":
+    case "Ethereum Mainnet":
       chain = "eth";
+      txnUrl = "https://etherscan.io.tx/";
       break;
     default:
       chain = null;
