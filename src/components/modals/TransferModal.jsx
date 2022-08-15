@@ -43,6 +43,10 @@ function TransferModal(props) {
           chain = "fuji";
           break;
 
+        case "Ethereum Mainnet":
+          chain = "eth";
+          break;
+
         default:
           console.log(props.toTransfer.network);
           throw new Error("No chain specified for transfer!");
