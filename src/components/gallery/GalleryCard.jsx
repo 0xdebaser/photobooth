@@ -201,9 +201,19 @@ function GalleryCard(props) {
                       View NFT on OpenSea
                     </a>
                   )}
-                  {(chain === "eth" || chain === "goerli") && (
+                  {chain === "goerli" && (
                     <a
                       href={`https://testnets.opensea.io/assets/goerli/${props.contract}/${props.tokenId}`}
+                      className="card-link"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View NFT on OpenSea
+                    </a>
+                  )}
+                  {chain === "eth" && (
+                    <a
+                      href={`https://opensea.io/assets/ethereum/${props.contract}/${props.tokenId}`}
                       className="card-link"
                       target="_blank"
                       rel="noreferrer"
