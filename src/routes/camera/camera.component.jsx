@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import Webcam from "react-webcam";
 import CamButton from "../../components/camera/CamButton";
 import FilterSuite from "../../components/camera/FilterSuite";
-import { Pixelify } from "react-pixelify";
-import { useNavigate } from "react-router-dom";
 
-import fizzgenMe from "../../utils/fizzgen_creation/FizzgenMe.mjs";
 import "./camera.styles.scss";
 
 function Camera(props) {
@@ -17,24 +14,20 @@ function Camera(props) {
   // State variable to hold filtered image
   const [filteredImg, setFilteredImg] = useState(null);
   // State variable that affects level of pixelation when 8bit filter is applied
-  const [pixLevel, setPixLevel] = useState(12);
-  // State variable that allows for flipping of camera on cell phones
   const [cameraFacing, setCameraFacing] = useState("user");
-
-  let navigate = useNavigate();
 
   // Options/config of webcam
   const videoConstraints = {
-    width: 360,
-    height: 360,
+    width: 1080,
+    height: 1350,
     facingMode: cameraFacing,
   };
 
   // Captures webcam image
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot({
-      width: 360,
-      height: 360,
+      width: 1080,
+      height: 1350,
     });
     setImgSrc(imageSrc);
   }, [webcamRef, setImgSrc]);
@@ -42,7 +35,7 @@ function Camera(props) {
   // Removes all filters and resets webcam
   function reset() {
     const canvas = document.querySelector("canvas");
-    if (canvas && appliedFilter !== "8bit") {
+    if (canvas) {
       canvas.remove();
     }
     setImgSrc(null);
@@ -68,7 +61,7 @@ function Camera(props) {
           )}
 
           {/* Once image has been captured (but before filter is applied), display captured image */}
-          {imgSrc && !filteredImg && appliedFilter !== "8bit" && (
+          {imgSrc && !filteredImg && (
             <img
               id="captured-img"
               className="img-captured center-block"
@@ -85,10 +78,6 @@ function Camera(props) {
               hidden
             />
           </div>
-          {/* This only is active when the 8 bit filter is in use */}
-          {appliedFilter === "8bit" && (
-            <Pixelify src={imgSrc} pixelSize={pixLevel} />
-          )}
         </div>
       </div>
 
@@ -124,8 +113,6 @@ function Camera(props) {
             setAppliedFilter={setAppliedFilter}
             filteredImg={filteredImg}
             setFilteredImg={setFilteredImg}
-            pixLevel={pixLevel}
-            setPixLevel={setPixLevel}
           />
         )}
       </div>
@@ -137,15 +124,7 @@ function Camera(props) {
             label="fizzgen me!"
             primary={true}
             handler={async () => {
-              await fizzgenMe(
-                props.user,
-                filteredImg,
-                props.setStep1,
-                props.setStep2,
-                props.setStep3,
-                props.setGalleryData
-              );
-              navigate("/gallery");
+              console.log("Handler called!");
             }}
             modal="modal"
             target="#fizzgen-modal"
