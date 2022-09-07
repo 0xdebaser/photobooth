@@ -1,3 +1,4 @@
 .cam-container {
+  max-width: 95%;
   object-fit: contain;
   text-align: center; }
