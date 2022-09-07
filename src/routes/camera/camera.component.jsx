@@ -18,16 +18,16 @@ function Camera(props) {
 
   // Options/config of webcam
   const videoConstraints = {
-    width: 1080,
-    height: 1350,
+    // width: 1080,
+    // height: 1350,
     facingMode: cameraFacing,
   };
 
   // Captures webcam image
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot({
-      width: 1080,
-      height: 1350,
+      // width: 1080,
+      // height: 1350,
     });
     setImgSrc(imageSrc);
   }, [webcamRef, setImgSrc]);
@@ -46,38 +46,30 @@ function Camera(props) {
   return (
     <div className="container mt-3">
       <div className="row">
-        <div className="col text-center">
+        <div className="col cam-container">
           {/* Display webcam until image is captured */}
           {!imgSrc && (
             <Webcam
               audio={false}
               ref={webcamRef}
-              height={360}
-              width={360}
+              // height={1350}
+              // width={1080}
               videoConstraints={videoConstraints}
               screenshotFormat="image/jpeg"
-              screenshotQuality={0.5}
+              screenshotQuality={1}
             />
           )}
-
           {/* Once image has been captured (but before filter is applied), display captured image */}
           {imgSrc && !filteredImg && (
             <img
               id="captured-img"
-              className="img-captured center-block"
+              className="center-block"
               src={imgSrc}
               alt="captured from webcam"
             />
           )}
           {/* Once filter is applied, this displays the filtered image */}
-          <div id="canvas-container">
-            <img
-              id="to-be-replaced"
-              src={imgSrc}
-              alt="hidden placeholder"
-              hidden
-            />
-          </div>
+          {filteredImg && <img src={filteredImg} alt="filter applied" />}
         </div>
       </div>
 
@@ -117,28 +109,27 @@ function Camera(props) {
         )}
       </div>
 
-      {/* If logged in Fizzgen me button appears once filter is applied (or none is selected), otherwise login button*/}
-      <div className="row mt-2" id="fizzgen-me-row">
-        {filteredImg && props.user && (
+      {/* Once filtered is applied (or none selected) save & insta buttons appear */}
+
+      {filteredImg && (
+        <div className="d-flex flex-row align-items-center justify-content-center mt-2">
           <CamButton
-            label="fizzgen me!"
+            className="mx-2"
+            label={<i className="bi bi-instagram"></i>}
             primary={true}
             handler={async () => {
-              console.log("Handler called!");
+              console.log("Instagram handler called!");
             }}
-            modal="modal"
-            target="#fizzgen-modal"
           />
-        )}
-        {filteredImg && !props.user && (
           <CamButton
-            label="login to enable fizzgen creation"
+            label="Save"
             primary={true}
-            modal="modal"
-            target="#loginModal"
+            handler={async () => {
+              console.log("Save handler called!");
+            }}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

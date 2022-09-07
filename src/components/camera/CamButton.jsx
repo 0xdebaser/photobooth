@@ -5,7 +5,7 @@ function CamButton(props) {
     <div className="text-center">
       {props.primary && (
         <button
-          className="btn btn-cam btn-secondary"
+          className={`btn btn-cam btn-secondary ${props.className}`}
           data-bs-toggle={props.modal}
           data-bs-target={props.target}
           onClick={props.handler}
