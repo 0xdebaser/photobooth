@@ -45,32 +45,30 @@ function Camera(props) {
 
   return (
     <div className="container mt-3">
-      <div className="row">
-        <div className="col cam-container">
-          {/* Display webcam until image is captured */}
-          {!imgSrc && (
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              // height={1350}
-              // width={1080}
-              videoConstraints={videoConstraints}
-              screenshotFormat="image/jpeg"
-              screenshotQuality={1}
-            />
-          )}
-          {/* Once image has been captured (but before filter is applied), display captured image */}
-          {imgSrc && !filteredImg && (
-            <img
-              id="captured-img"
-              className="center-block"
-              src={imgSrc}
-              alt="captured from webcam"
-            />
-          )}
-          {/* Once filter is applied, this displays the filtered image */}
-          {filteredImg && <img src={filteredImg} alt="filter applied" />}
-        </div>
+      <div className="cam-container">
+        {/* Display webcam until image is captured */}
+        {!imgSrc && (
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            // height={1350}
+            // width={1080}
+            videoConstraints={videoConstraints}
+            screenshotFormat="image/jpeg"
+            screenshotQuality={1}
+          />
+        )}
+        {/* Once image has been captured (but before filter is applied), display captured image */}
+        {imgSrc && !filteredImg && (
+          <img
+            id="captured-img"
+            className="center-block"
+            src={imgSrc}
+            alt="captured from webcam"
+          />
+        )}
+        {/* Once filter is applied, this displays the filtered image */}
+        {filteredImg && <img src={filteredImg} alt="filter applied" />}
       </div>
 
       {/* Capture button appears until image is captured, then becomes reset button */}
