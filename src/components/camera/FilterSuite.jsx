@@ -9,6 +9,30 @@ function FilterSuite(props) {
   const filtersArray = Object.keys(filtersInUse).sort();
   filtersArray.unshift("none");
 
+  function setOverlayPosition(
+    baseImageWidth,
+    baseImageHeight,
+    overlayWidth,
+    overlayHeight
+  ) {
+    // Returns an array with X start at 0, and Y start at 1
+    switch (props.position) {
+      case "leftTop":
+        return [10, 10];
+      case "rightTop":
+        return [baseImageWidth - (overlayWidth + 10), 10];
+      case "leftBottom":
+        return [10, baseImageHeight - (overlayHeight + 10)];
+      case "rightBottom":
+        return [
+          baseImageWidth - (overlayWidth + 10),
+          baseImageHeight - (overlayHeight + 10),
+        ];
+      default:
+        console.log("props.position missing!");
+    }
+  }
+
   function applyFilter(filter) {
     //Get rid of any exisitng filtered image
     if (props.appliedFilter !== "8bit") {
@@ -20,43 +44,70 @@ function FilterSuite(props) {
 
     props.setAppliedFilter(filter);
 
+    const overlay = new Image();
+
     switch (filter) {
       case "none":
         props.setFilteredImg(props.imgSrc);
         break;
 
       case "test1":
-        const baseImage = new Image();
-        baseImage.src = props.imgSrc;
-        console.log(`Height: ${baseImage.height} || Width: ${baseImage.width}`);
-
-        mergeImages([
-          { src: props.imgSrc },
-          {
-            src: runBigLinearBlack200,
-            x: baseImage.width - 210,
-            y: baseImage.height - 65,
-          },
-        ]).then((b64) => props.setFilteredImg(b64));
+        overlay.src = runBigLinearBlack200;
         break;
 
       // Default handles any of the PixelsJS filters
       default:
         console.log("Reached default of filter switch. Why?");
     }
+
+    const baseImage = new Image();
+    baseImage.src = props.imgSrc;
+    const startingPosition = setOverlayPosition(
+      baseImage.width,
+      baseImage.height,
+      overlay.width,
+      overlay.height
+    );
+    mergeImages([
+      { src: props.filteredImg ? props.filteredImg : props.imgSrc },
+      {
+        src: overlay.src,
+        x: startingPosition[0],
+        y: startingPosition[1],
+      },
+    ]).then((b64) => props.setFilteredImg(b64));
+  }
+
+  console.log(props.position);
+  let selectionLabel;
+  switch (props.position) {
+    case "leftTop":
+      selectionLabel = "upper left:";
+      break;
+    case "rightTop":
+      selectionLabel = "upper right:";
+      break;
+    case "leftBottom":
+      selectionLabel = "lower left:";
+      break;
+    case "rightBottom":
+      selectionLabel = "lower right:";
+      break;
+    default:
+      selectionLabel = "position missing!";
   }
 
   return (
-    <div className="col col-6 offset-3 col-md-4 offset-md-4 col-xl-2 offset-xl-5 text-center ml-auto mr-auto">
+    <div className="mx-2">
       <div>
         <select
           className="form-select text-center"
           id="filter-select"
           aria-label="Filter select"
-          defaultValue="choose filter:"
+          defaultValue={selectionLabel}
           onChange={(event) => applyFilter(event.target.value)}
         >
-          <option>choose filter:</option>
+          <option>{selectionLabel}</option>
           {filtersArray.map((filter, index) => {
             return (
               <option

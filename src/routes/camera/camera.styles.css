@@ -2,3 +2,7 @@
   max-width: 95vw;
   object-fit: contain;
   text-align: center; }
+
+.filter-button-container {
+  max-width: 95% vw;
+  background-color: hotpink; }

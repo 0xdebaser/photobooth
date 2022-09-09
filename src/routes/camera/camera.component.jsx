@@ -56,6 +56,7 @@ function Camera(props) {
             videoConstraints={videoConstraints}
             screenshotFormat="image/jpeg"
             screenshotQuality={1}
+            className="webcam"
           />
         )}
         {/* Once image has been captured (but before filter is applied), display captured image */}
@@ -95,17 +96,46 @@ function Camera(props) {
       </div>
 
       {/* Filter drop down button appears after image is captured */}
-      <div className="row mt-2">
-        {imgSrc && (
-          <FilterSuite
-            imgSrc={imgSrc}
-            appliedFilter={appliedFilter}
-            setAppliedFilter={setAppliedFilter}
-            filteredImg={filteredImg}
-            setFilteredImg={setFilteredImg}
-          />
-        )}
-      </div>
+      {imgSrc && (
+        <div>
+          <div className="d-flex flex-row align-items-center justify-content-center mt-2 filter-button-container">
+            <FilterSuite
+              imgSrc={imgSrc}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              filteredImg={filteredImg}
+              setFilteredImg={setFilteredImg}
+              position="leftTop"
+            />
+            <FilterSuite
+              imgSrc={imgSrc}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              filteredImg={filteredImg}
+              setFilteredImg={setFilteredImg}
+              position="rightTop"
+            />
+          </div>
+          <div className="d-flex flex-row align-items-center justify-content-center mt-2 filter-button-container">
+            <FilterSuite
+              imgSrc={imgSrc}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              filteredImg={filteredImg}
+              setFilteredImg={setFilteredImg}
+              position="leftBottom"
+            />
+            <FilterSuite
+              imgSrc={imgSrc}
+              appliedFilter={appliedFilter}
+              setAppliedFilter={setAppliedFilter}
+              filteredImg={filteredImg}
+              setFilteredImg={setFilteredImg}
+              position="rightBottom"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Once filtered is applied (or none selected) save & insta buttons appear */}
 
